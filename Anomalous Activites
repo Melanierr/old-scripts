@@ -1,8 +1,12 @@
 --if game.PlaceId = 7884566060 then ..don't add this until the end..
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Anomalous Activities", "GrapeTheme")
+local Window = Library.CreateLib("Donut Hub", "Sentinel")
 local Tab = Window:NewTab("Player")
  local Section = Tab:NewSection("Character")
+    Section:NewLabel("Credit : Irish#8707 and Applebox#0001")
+    Section:NewKeybind("Press RightCtrl", "open/close GUI", Enum.KeyCode.RightControl, function()
+	Library:ToggleUI()
+    end)
     Section:NewButton("Inf Jump", "For Anomaly only", function()
         local InfiniteJumpEnabled = true
             game:GetService("UserInputService").JumpRequest:connect(function()
@@ -43,7 +47,7 @@ Section:NewButton("Damage Multiply", "Double your damage on all weapons", functi
         setreadonly(mt, true)
         print("work")
     end)
-Section:NewButton("Full bright", "Achieve the power of light, credit to Applebox", function()
+    Section:NewButton("Full bright", "Achieve the power of light, credit to Applebox", function()
             local function brightFunc() ---loop  Fulbright
             game:GetService("Lighting").Brightness = 2
             game:GetService("Lighting").ClockTime = 14
