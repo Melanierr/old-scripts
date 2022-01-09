@@ -55,7 +55,4 @@ Section:NewButton("Full bright", "Achieve the power of light, credit to Applebox
         game:GetService("RunService").RenderStepped:connect(function()
         brightFunc()
     end)
-Section:NewButton("ESP", "You have heat vision xD", function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/frfeerrg/turbo-couscous/main/ESP'))()
-end)
 end)
