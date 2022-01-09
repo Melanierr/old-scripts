@@ -1,7 +1,3 @@
-Settings: 
-Replace "nil" with "true" to enable the setting, or "false" to disable the setting. Without the quotes. 
-If you do not change "nil", the defaults will take place.
-]]
 _G.WRDESPEnabled = true --Enables the ESP (Defaults to true)
 _G.WRDESPBoxes = true --Draws boxes around other players (Defaults to true)
 _G.WRDESPTeamColors = true --Distinguish different teams by their team color. If the game sets one. (Defaults to true)
