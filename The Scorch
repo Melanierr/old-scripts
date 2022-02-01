@@ -1,0 +1,40 @@
+-- if game.PlaceId = 5033328743 then
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Donut Hub", "Sentinel")
+local Tab = Window:NewTab("Main")
+          local Section = Tab:NewSection("main thing")
+               Section:NewButton("Grab ammo", "Grab ammo", function()
+                    local args = {
+                    [1] = game:GetService("Players").LocalPlayer.Character.inHotBarHolders.rifleSAIGRYHolder,
+                    [2] = 85
+                    }
+
+                    workspace.Interactibles.Deployables.ammoPack.requestAmmo:FireServer(unpack(args))
+                    end)   
+               Section:NewButton("Cure", "Use once only", function()  
+                    local args = {
+                         [1] = game:GetService("Players").LocalPlayer.Character
+                         }
+
+                         game:GetService("ReplicatedStorage").generalRemotes.cureEvent:FireServer(unpack(args))
+                     end)
+               Section:NewButton("Open Atrium's vending machine", "WIP", function()
+                    print("yo")
+               end)
+               Section:NewButton("Open Sewer's shop", "WIP", function()
+                    local args = {
+                    [1] = workspace.Interactibles.Shops.Shop,
+                    [2] = {
+                         ["openUI"] = true,
+                         ["shopPart"] = workspace.Interactibles.Shops.Shop
+                    }
+                    }
+                    workspace.Interactibles.Shops.trigger:FireServer(unpack(args))
+               end)
+               Section:NewButton("Reset", "use this when your UI bug or something", function()
+                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+               end)
+local Tab = Window:NewTab("Misc")
+     local Section = Tab:NewSection("Info")
+          Section:NewLabel("Created by Irish#8707")
+          Section:NewLabel("Some function might not work at all and it's in WIP!")
