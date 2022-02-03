@@ -1,0 +1,236 @@
+-- if game.PlaceId = 5033328743 then
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Donut Hub", "Sentinel")
+local Tab = Window:NewTab("Main")
+          local Section = Tab:NewSection("main thing")
+               Section:NewButton("Grab ammo", "Grab ammo", function()
+                    local args = {
+                    [1] = game:GetService("Players").LocalPlayer.Character.inHotBarHolders.rifleSAIGRYHolder,
+                    [2] = 85
+                    }
+
+                    workspace.Interactibles.Deployables.ammoPack.requestAmmo:FireServer(unpack(args))
+                    end)   
+               Section:NewButton("Cure", "Use once only", function()  
+                    local args = {
+                         [1] = game:GetService("Players").LocalPlayer.Character
+                         }
+
+                         game:GetService("ReplicatedStorage").generalRemotes.cureEvent:FireServer(unpack(args))
+                     end)
+               Section:NewButton("Open Atrium's vending machine", "WIP", function()
+                    print("yo")
+               end)
+               Section:NewButton("Open Sewer's shop", "WIP", function()
+                    local args = {
+                    [1] = workspace.Interactibles.Shops.Shop,
+                    [2] = {
+                         ["openUI"] = true,
+                         ["shopPart"] = workspace.Interactibles.Shops.Shop
+                    }
+                    }
+                    workspace.Interactibles.Shops.trigger:FireServer(unpack(args))
+               end)
+               Section:NewButton("Reset", "use this when your UI bug or something", function()
+                    game.Players.LocalPlayer.Character.Humanoid.Health = 0
+               end)
+     local Section = Tab:NewSection("Autofarm")
+               Section:NewButton("Autofarm ore", "Auto TP to stone, require an autoclicker to function good", function()
+                    _G.bruh = true
+                         while _G.bruh do
+                         wait(.1)
+                         for _,v in ipairs(game.Workspace.OreSpawnpoints:GetChildren()) do
+                         if v.Name == "OreSpawn" and v:FindFirstChild("Large") then
+                              game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Large.CFrame
+                         local A_1 = v.Large
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         elseif v.Name == "OreSpawn" and v:FindFirstChild("Med") then
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Med.CFrame
+                         local A_1 = v.Med
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         elseif v.Name == "OreSpawn" and v:FindFirstChild("Small") then
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Small.CFrame
+                         local A_1 = v.Small
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         end
+                         end
+                         end
+                    end)
+               Section:NewButton("Turn off Autofarm", "Stop autofarming", function()
+                    _G.bruh = false
+                         while _G.bruh do
+                         wait(.1)
+                         for _,v in ipairs(game.Workspace.OreSpawnpoints:GetChildren()) do
+                         if v.Name == "OreSpawn" and v:FindFirstChild("Large") then
+                              game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Large.CFrame
+                         local A_1 = v.Large
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         elseif v.Name == "OreSpawn" and v:FindFirstChild("Med") then
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Med.CFrame
+                         local A_1 = v.Med
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         elseif v.Name == "OreSpawn" and v:FindFirstChild("Small") then
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Small.CFrame
+                         local A_1 = v.Small
+                         game:GetService("ReplicatedStorage").generalItemRemotes.oHit:FireServer(A_1)
+                         end
+                         end
+                         end
+                    end)
+local Tab = Window:NewTab("Location")
+     local Section = Tab:NewSection("Town")
+                    Section:NewButton("City Town", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(376, 49, -667)
+                    end)
+                    Section:NewButton("Outland Town", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-485, 101, -1408)  
+                    end)
+                    Section:NewButton("Construction Town", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(743, 9, 795)
+                    end)
+     local Section = Tab:NewSection("Shop")
+                    Section:NewButton("Sewer Shop", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-601, -30, -387)
+                    end)
+                    Section:NewButton("WCKD Shop", "nil", function()
+                       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-804, 25, 399)
+                    end)
+                    Section:NewButton("TRA Shop", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(1969, 161, -1427)
+                    end)
+                    Section:NewButton("Moutain Shop", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(183, 140, -1720)
+                    end)
+                    Section:NewButton("Bar Shop", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-831, 150, -344)
+                    end)
+                    Section:NewButton("Black Market#1", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-1404, 143, -663)
+                    end)
+                    Section:NewButton("Black Market#2", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-91, 105, -3271)
+                    end)
+     local Section = Tab:NewSection("Parking")
+                    Section:NewButton("TRA's parking", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(1963, 161, -1617)
+                    end)
+                    Section:NewButton("WCKD's parking", "nil", function()
+                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFame.new(-857, 14, 38)
+                    end)
+local Tab = Window:NewTab("Player")
+                    local Section = Tab:NewSection("Universal")
+                         Section:NewButton("Infinite Jump", "Allow you to jump in air", function()
+                              local Player = game:GetService'Players'.LocalPlayer;
+                                        local UIS = game:GetService'UserInputService';
+
+                                        _G.JumpHeight = 50;
+
+                                        function Action(Object, Function) if Object ~= nil then Function(Object); end end
+
+                                        UIS.InputBegan:connect(function(UserInput)
+                                        if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Space then
+                                             Action(Player.Character.Humanoid, function(self)
+                                                  if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+                                                       Action(self.Parent.HumanoidRootPart, function(self)
+                                                            self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+                                                       end)
+                                                  end
+                                             end)
+                                        end
+                                        end)
+                         Section:NewButton("God mode", "Unable to use item and jump, Reset character to work", function()
+                               repeat wait()
+                                   until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Torso") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid")
+                                   local mouse = game.Players.LocalPlayer:GetMouse()
+                                   repeat wait() until mouse
+                                   local plr = game.Players.LocalPlayer
+                                   local torso = plr.Character.Torso
+                                   local flying = true
+                                   local deb = true
+                                   local ctrl = {f = 0, b = 0, l = 0, r = 0}
+                                   local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+                                   local maxspeed = 50
+                                   local speed = 0
+
+                                   function Fly()
+                                   local bg = Instance.new("BodyGyro", torso)
+                                   bg.P = 9e4
+                                   bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+                                   bg.cframe = torso.CFrame
+                                   local bv = Instance.new("BodyVelocity", torso)
+                                   bv.velocity = Vector3.new(0,0.1,0)
+                                   bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+                                   repeat wait()
+                                   plr.Character.Humanoid.PlatformStand = true
+                                   if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+                                   speed = speed+.5+(speed/maxspeed)
+                                   if speed > maxspeed then
+                                   speed = maxspeed
+                                   end
+                                   elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+                                   speed = speed-1
+                                   if speed < 0 then
+                                   speed = 0
+                                   end
+                                   end
+                                   if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+                                   bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+                                   lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+                                   elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+                                   bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+                                   else
+                                   bv.velocity = Vector3.new(0,0.1,0)
+                                   end
+                                   bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+                                   until not flying
+                                   ctrl = {f = 0, b = 0, l = 0, r = 0}
+                                   lastctrl = {f = 0, b = 0, l = 0, r = 0}
+                                   speed = 0
+                                   bg:Destroy()
+                                   bv:Destroy()
+                                   plr.Character.Humanoid.PlatformStand = false
+                                   end
+                                   mouse.KeyDown:connect(function(key)
+                                   if key:lower() == "e" then
+                                   if flying then flying = false
+                                   else
+                                   flying = true
+                                   Fly()
+                                   end
+                                   elseif key:lower() == "w" then
+                                   ctrl.f = 1
+                                   elseif key:lower() == "s" then
+                                   ctrl.b = -1
+                                   elseif key:lower() == "a" then
+                                   ctrl.l = -1
+                                   elseif key:lower() == "d" then
+                                   ctrl.r = 1
+                                   end
+                                   end)
+                                   mouse.KeyUp:connect(function(key)
+                                   if key:lower() == "w" then
+                                   ctrl.f = 0
+                                   elseif key:lower() == "s" then
+                                   ctrl.b = 0
+                                   elseif key:lower() == "a" then
+                                   ctrl.l = 0
+                                   elseif key:lower() == "d" then
+                                   ctrl.r = 0
+                                   end
+                                   end)
+                                   Fly()
+                              end)
+local Tab = Window:NewTab("Miscellaneous")
+     local Section = Tab:NewSection("shit =)")
+          Section:NewButton("Rejoin", "rejoins the same server", function()
+               game:GetService'TeleportService':TeleportToPlaceInstance(game.PlaceId,game.JobId,game:GetService'Players'.LocalPlayer)
+          end)
+end)
+local Tab = Window:NewTab("Information")
+     local Section = Tab:NewSection("Info")
+          Section:NewLabel("Created by Irish#8707")
+          Section:NewLabel("Some function might not work and it's in WIP!")
+          Section:NewLabel("DM any bug if you find one")
+     Section:NewKeybind("RightCtrl", "close/open GUI", Enum.KeyCode.K, function()
+	Library:ToggleUI()
+end)
