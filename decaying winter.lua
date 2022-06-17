@@ -6,7 +6,7 @@ repeat wait() until game.Players.LocalPlayer ~= nil
 
 game.StarterGui:SetCore("SendNotification", {
     Title = 'Initializing';
-    Text = "Loading script, enter a round to fully load";
+    Text = "Loading script, enter a round to fully load (Made by Aidez)";
     Icon = "rbxassetid://6400318893";
     Duration = 5;
 })
