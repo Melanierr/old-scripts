@@ -3461,8 +3461,7 @@ local mouse = game.Players.LocalPlayer:GetMouse()
         if key == "y" then
            game:GetService("Workspace").ServerStuff.deathPlay:FireServer()
         end
-    end
-end
+    end)
 
 wait(5)
 repeat wait() until game.Players.LocalPlayer ~= nil
