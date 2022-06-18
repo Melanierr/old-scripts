@@ -7,7 +7,6 @@ repeat wait() until game.Players.LocalPlayer ~= nil
 game.StarterGui:SetCore("SendNotification", {
     Title = 'Initializing';
     Text = "Loading script, enter a round to fully load (Made by Aidez)";
-    Icon = "rbxassetid://6400318893";
     Duration = 5;
 })
 
@@ -3123,7 +3122,6 @@ mouse.KeyDown:Connect(function(key)
         game.StarterGui:SetCore("SendNotification", {
             Title = "notification";
             Text = "Your Super-Run speed is now "..tostring(SuperRun.RunSpeed).."!";
-            Icon = "rbxassetid://2541869220";
             Duration = 3;
         })
         return
@@ -3437,7 +3435,7 @@ if _G.Code1 ~= nil and _G.Code2 ~= nil then
     game.StarterGui:SetCore("SendNotification", {
         Text = "Get good, kid.                    (Modded by Irish)";
         Icon = "rbxassetid://6400318893";
-        Duration = 5;
+        Duration = 2;
     })
     print('a')
 else
@@ -3452,8 +3450,7 @@ wait(3)
 game.StarterGui:SetCore("SendNotification", {
         Title = 'Force Reset';
         Text = "Press Y to force reset";
-        Icon = "rbxassetid://6400318893";
-        Duration = 5;
+        Duration = 3;
     })
 
 local mouse = game.Players.LocalPlayer:GetMouse()
