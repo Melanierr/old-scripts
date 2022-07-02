@@ -7,10 +7,9 @@ repeat
 until game.Players.LocalPlayer ~= nil
 
 game.StarterGui:SetCore("SendNotification", {
-    Title = 'Initializing',
-    Text = "Loading script, enter a round to fully load",
-    Icon = "rbxassetid://6712031772",
-    Duration = 3
+    Text = "injected",
+    Icon = "rbxassetid://2541869220",
+    Duration = 4
 })
 
 local namecall
@@ -37,35 +36,27 @@ local AkimboActive = false
 local AuxFunction = nil
 local CurrentTrap = "Proximity Mine"
 local ToLoopDrop = ""
+local CurrentThrowable = "Molotovs"
 -- local CameraShakeFunction
-local LoopedFeatures = {"KillAura", "GrenadeRain", "SuperRun", "LoopDrop"}
+local LoopedFeatures = {"KillAura", "GrenadeRain", "LoopDrop", "AntiVoteKick"}
 local DevWeapons = {"RVolver", "JBox", "LSMini", "GMSword", "EMSword", "CMMaul", "PLBlade"}
-local GuiCommands = {"InfClip", "InfAmmo", "Godmode", "OneShot", "NoCooldown", "InfAux", "SilentAim", "AutoParry",
-                     "KillAura", "VirusBlock", "AntiDebuff", "NoHunger", "AntiFallDamage", "AntiRecoil", "SuperRun"}
+local GuiCommands = {"InfClip", "InfAmmo", "Godmode", "SemiGodmode", "OneShot", "NoCooldown", "InfAux", "SilentAim",
+                     "AutoParry", "KillAura", "VirusBlock", "AntiDebuff", "NoHunger", "AntiFallDamage", "AntiRecoil",
+                     "AntiVoteKick"}
 
 local Toggles = {
-    Godmode = false,
-    SemiGodmode = false,
     InfRun = true,
     AntiDebuff = false,
     Dispenser = false,
     NoCooldown = false,
     GrabAmmo = false,
     VirusBlock = false,
-    OneShot = false,
-    SilentAim = false,
-    InfAmmo = false,
-    InfClip = false,
     AntiRecoil = false,
     AntiFallDamage = false,
-    SuperRun = false,
     NoHunger = false,
-    AutoParry = false,
-    KillAura = false,
-    AutoKill = false,
     GrenadeRain = false,
     InfAux = false,
-    LoopDrop = false
+    AntiVoteKick = false
 }
 
 local Traps = {
@@ -77,15 +68,50 @@ local Traps = {
     ["Mines"] = "Proximity Mine",
     ["Landmines"] = "Proximity Mine",
     ["Remote Explosives"] = "Remote Explosive",
-    ["C4"] = "Remote Explosive"
+    ["C4"] = "Remote Explosive",
+    ["Crafted Pavise"] = "Crafted Pavise",
+    ["Pavise"] = "Crafted Pavise",
+    ["Barrier"] = "Crafted Pavise",
+    ["Wall"] = "Crafted Pavise",
+    ["Blockade"] = "Crafted Pavise",
+    ["Wood Barrier"] = "Crafted Pavise"
 }
 
 local TrapToItemName = {
     ["Steel Punjis"] = "PTrap",
     ["Steel Snares"] = "SSnare",
     ["Proximity Mine"] = "PMine",
-    ["Remote Explosives"] = "RExplosive"
+    ["Remote Explosives"] = "RExplosive",
+    ["Crafted Pavise"] = "CRPavise"
 };
+
+local Throwables = {
+    ["Knives"] = "TKnife",
+    ["Throwing Knives"] = "TKnife",
+    ["Knife"] = "TKnife",
+    ["Dynamite"] = "Dynamite",
+    ["TNT"] = "Dynamite",
+    ["Bundle of Dynamite"] = "Dynamite",
+    ["Molotovs"] = "Molo",
+    ["Molly"] = "Molo",
+    ["Fire bomb"] = "Molo",
+    ["Molotov Cocktail"] = "Molo",
+    ["Bottle"] = "Molo",
+    ["Grenade"] = "MGrenade",
+    ["M67 Grenade"] = "MGrenade",
+    ["Frag Grenade"] = "MGrenade",
+    ["Impact Grenade"] = "ImpN",
+    ["Touch Grenade"] = "ImpN",
+    ["Bomb Spear"] = "CRBSpear",
+    ["Spear"] = "CRBSpear",
+    ["Hot Dog"] = "CRBSpear",
+    ["HotDog"] = "CRBSpear",
+    ["Caltrops"] = "TCaltrop",
+    ["Spikes"] = "TCaltrop",
+    ["Throwing Axe"] = "TAxe",
+    ["Axe"] = "TAxe",
+    ["Hatchet"] = "TAxe"
+}
 
 local SuperRun = {
     WHeld = false,
@@ -99,7 +125,8 @@ local Debounces = {
     Dispensing = false,
     Killing = false,
     Trap = false,
-    LoopDrop = false
+    LoopDrop = false,
+    Throwing = false
 }
 
 local WeaponStats = nil
@@ -120,15 +147,18 @@ local NameToStat = {
     },
     ["ROUNDS_PER_MINUTE"] = {
         Stat = "speedrating",
-        Increment = -0.01
+        Increment = -0.01,
+        BigIncrement = -0.1
     },
     ["EFFECTIVE_RECOIL"] = {
         Stat = "woundrating",
-        Increment = 2
+        Increment = 2,
+        BigIncrement = 20
     },
     ["FIREARM_INACCURACY"] = {
         Stat = "sizerating",
-        Increment = 1
+        Increment = -1,
+        BigIncrement = -10
     },
 
     ------- MELEE ------
@@ -164,11 +194,13 @@ local NameToStat = {
 
     ["LIMB_DAMAGE"] = {
         Stat = "damagerating",
-        Increment = 5
+        Increment = 5,
+        BigIncrement = 50
     },
     ["HEAD_DAMAGE"] = {
         Stat = "damagerating",
-        Increment = 5
+        Increment = 5,
+        BigIncrement = 50
     },
     ["SPEED_RATING"] = {
         Stat = "speedrating",
@@ -240,6 +272,8 @@ local Weapons = {
     ["Kel-Tec KSG"] = "KSG",
     ["KSG"] = "KSG",
     ["Bomb Spear"] = "CRBSpear",
+    ["Hot Dog"] = "CRBSpear",
+    ["HotDog"] = "CRBSpear",
     ["Kitchen Knife"] = "KitKnife",
     ["M60-E6"] = "SubLMG",
     ["LMG"] = "SubLMG",
@@ -400,6 +434,7 @@ local Weapons = {
     ["MilBow"] = "CPBow",
     ["Bow"] = "CPBow",
     ["M67 Grenade"] = "MGrenade",
+    ["Grenade"] = "MGrenade",
     ["Frag Grenade"] = "MGrenade",
     ["A.J.M. 9"] = "AJM",
     ["AJM 9"] = "AJM",
@@ -530,9 +565,9 @@ local EspObjects = {
 local EspInfo = {
     Toggles = {
         Enemies = false,
-        Demons = true,
+        Demons = false,
 
-        Guns = true,
+        Guns = false,
         Melee = false,
         Ammo = false,
         Traps = false,
@@ -763,40 +798,43 @@ local EspInfo = {
     }
 }
 
-local function KnifeKill(Model, Killaura)
+local function KnifeKill(Model, UntilDeath)
     if Model.Parent ~= nil and Model.Parent.Name == "activeHostiles" or Model.Parent ~= nil and Model.Parent.Name ==
         "NoTarget" then
-        local TargetPart = Model:FindFirstChild("Torso")
+        local TargetPart = Model:FindFirstChild("Torso") or Model:FindFirstChild("Head")
         if TargetPart == nil then
             return
         end
-        if Model:FindFirstChild("Humanoid") and Model.Humanoid.Health == 0 then
+        if not Model:FindFirstChild("Humanoid") or Model.Humanoid.Health <= 0 then
             return
         end
-        local Data = {
-            ["throwrating"] = 4,
-            ["ability"] = "Lightweight and sharp.",
-            ["blacklisted"] = true,
-            ["animset"] = "1HBL",
-            ["desc"] = "Formerly used for a sport where competitors would throw knives at each-other and whoever could catch it with their palm would win a prize! Now you can re-enact that beautiful sport again with these!",
-            ["weapontype"] = "Item",
-            ["name"] = "Throwing Knife",
-            ["damagerating"] = {
-                [1] = 50,
-                [2] = 50
-            },
-            ["icon"] = "2481852009",
-            ["sizerating"] = 3,
-            ["woundrating"] = 1
-        }
+        if WeaponStats == nil and game.Workspace:FindFirstChild("ServerStuff") and
+            game.Workspace.ServerStuff:FindFirstChild("Statistics") and
+            game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
+            WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
+        end
+        local Data = WeaponStats["TKnife"]
         local Position = CFrame.new(TargetPart.CFrame.p + Vector3.new(0, 0, math.random(-2, 2)), TargetPart.CFrame.p)
         if _G.Code1 ~= nil and _G.Code2 ~= nil then
-            spawn(function()
-                workspace.ServerStuff.throwWeapon:FireServer("TKnife", 1000, Position, 0.19341856241226196, Data, 0,
-                    false, _G.Code1, nil, _G.Code2)
-            end)
+            if UntilDeath == true then
+                repeat
+                    spawn(function()
+                        local Position = CFrame.new(TargetPart.CFrame.p +
+                                                        Vector3.new(math.random(-2, 2), math.random(-2, 2),
+                                math.random(-2, 2)), TargetPart.CFrame.p)
+                        workspace.ServerStuff.throwWeapon:FireServer("TKnife", 1000, Position, 0.19341856241226196,
+                            Data, 0, false, _G.Code1, nil, _G.Code2)
+                    end)
+                    wait()
+                until Model == nil or not Model:FindFirstAncestor("Workspace") or not Model:FindFirstChild("Humanoid") or
+                    Model.Humanoid.Health <= 0
+            else
+                spawn(function()
+                    workspace.ServerStuff.throwWeapon:FireServer("TKnife", 1000, Position, 0.19341856241226196, Data, 0,
+                        false, _G.Code1, nil, _G.Code2)
+                end)
+            end
         end
-        Debounces.Killing = false
     end
 end
 
@@ -816,14 +854,11 @@ local function Kill(Model)
         local ReplacementGun = "FNLMG"
         if WeaponInfo ~= nil then
             WeaponType = WeaponInfo.weapontype
-        else
-            print("eat my ass")
         end
         if WeaponType ~= "Gun" then
             local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets:FindFirstChild(
                 WeaponStats[ReplacementGun].animset)
             game.Workspace.ServerStuff.getTPWeapon:FireServer(ReplacementGun, AnimSet, "Fist", nil, false)
-            print("set to " .. ReplacementGun)
             WaitForGun = true
         end
         if WaitForGun then
@@ -838,7 +873,6 @@ local function Kill(Model)
         if TargetPart == nil then
             return
         end
-        print("ya")
         local Data = {
             [1] = "gundamage",
             [2] = Model,
@@ -858,123 +892,136 @@ local function Kill(Model)
     end
 end
 
-local function RenderStepped()
-    if SuperRun.ShiftHeld == true and Toggles.SuperRun == true and game.Players.LocalPlayer.Character ~= nil and
-        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        if SuperRun.WHeld == true then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -SuperRun.RunSpeed)
-        end
-        if SuperRun.SHeld == true then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, SuperRun.RunSpeed)
-        end
-        if SuperRun.DHeld == true then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(SuperRun.RunSpeed, 0, 0)
-        end
-        if SuperRun.AHeld == true then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(-SuperRun.RunSpeed, 0, 0)
+if Toggles.KillAura then
+    for i = 1, #Enemies do
+        if Enemies[i] ~= nil and Enemies[i]:FindFirstChild("Torso") and
+            game.Players.LocalPlayer:DistanceFromCharacter(Enemies[i].Torso.Position) <= KillAuraDistance then
+            KnifeKill(Enemies[i])
         end
     end
-    if Toggles.KillAura then
-        for i = 1, #Enemies do
-            if Enemies[i] ~= nil and Enemies[i]:FindFirstChild("Torso") and
-                game.Players.LocalPlayer:DistanceFromCharacter(Enemies[i].Torso.Position) <= KillAuraDistance then
-                Kill(Enemies[i])
-            end
+    return
+end
+if Toggles.AntiVoteKick then
+    local Players = {}
+    for i, v in pairs(game.Players:GetPlayers()) do
+        if v ~= game.Players.LocalPlayer then
+            table.insert(Players, v)
         end
+    end
+    if #Players > 1 then
+        local Target = Players[math.random(0, #Players)]
+        if Target ~= nil then
+            game.Players:Chat("votekick/" .. Target.Name)
+        end
+    end
+end
+if Toggles.LoopDrop and not Debounces.LoopDrop and ToLoopDrop ~= "" then
+    local Current = ToLoopDrop
+    Debounces.LoopDrop = true
+    if WeaponStats == nil and game.Workspace:FindFirstChild("ServerStuff") and
+        game.Workspace.ServerStuff:FindFirstChild("Statistics") and
+        game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
+        WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
+    end
+    if WeaponStats[ToLoopDrop] == nil then
         return
     end
-    if Toggles.LoopDrop and not Debounces.LoopDrop and ToLoopDrop ~= "" then
-        local Current = ToLoopDrop
-        Debounces.LoopDrop = true
-        if WeaponStats == nil and game.Workspace:FindFirstChild("ServerStuff") and
-            game.Workspace.ServerStuff:FindFirstChild("Statistics") and
-            game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
-            WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
+    local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets:FindFirstChild(WeaponStats[ToLoopDrop]
+                                                                                                     .animset)
+    local Type = WeaponStats[ToLoopDrop].weapontype
+    local Uses = 1
+    local ToDropStats = WeaponStats[ToLoopDrop]
+    local NewStatsTable = {}
+    if Type == "Gun" and game.ReplicatedStorage.Weapons:FindFirstChild(ToLoopDrop) and
+        game.ReplicatedStorage.Weapons[ToLoopDrop]:FindFirstChild("ammo") then
+        Uses = game.ReplicatedStorage.Weapons[ToLoopDrop].ammo.Value
+    end
+    for i, v in pairs(ToDropStats) do
+        NewStatsTable[i] = v
+    end
+    for i, v in pairs(NewStatsTable) do
+        if string.sub(i, #i - 2, -1) ~= "old" and NewStatsTable[i .. "old"] ~= nil then
+            NewStatsTable[i] = NewStatsTable[i .. "old"]
         end
-        if WeaponStats[ToLoopDrop] == nil then
-            return
+    end
+    for i, v in pairs(NewStatsTable) do
+        if string.sub(i, #i - 2, -1) == "old" then
+            v = nil
         end
-        local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets:FindFirstChild(
-            WeaponStats[ToLoopDrop].animset)
-        local Type = WeaponStats[ToLoopDrop].weapontype
-        local Uses = 1
-        local ToDropStats = WeaponStats[ToLoopDrop]
-        local NewStatsTable = {}
-        if Type == "Gun" and game.ReplicatedStorage.Weapons:FindFirstChild(ToLoopDrop) and
-            game.ReplicatedStorage.Weapons[ToLoopDrop]:FindFirstChild("ammo") then
-            Uses = game.ReplicatedStorage.Weapons[ToLoopDrop].ammo.Value
-        end
-        for i, v in pairs(ToDropStats) do
-            NewStatsTable[i] = v
-        end
-        for i, v in pairs(NewStatsTable) do
-            if string.sub(i, #i - 2, -1) ~= "old" and NewStatsTable[i .. "old"] ~= nil then
-                NewStatsTable[i] = NewStatsTable[i .. "old"]
-            end
-        end
-        for i, v in pairs(NewStatsTable) do
-            if string.sub(i, #i - 2, -1) == "old" then
-                v = nil
-            end
-        end
-        game.Workspace.ServerStuff.getTPWeapon:FireServer(ToLoopDrop, AnimSet, "Fist", nil, false)
-        repeat
-            wait()
-        until game.Players.LocalPlayer.Character:FindFirstChild(ToLoopDrop) or ToLoopDrop == "" or ToLoopDrop ~= Current
-        local cframe = CFrame.new(381.598999, -1.04327154, -48.8513374, -0.0525665507, -0.320858359, 0.945667326,
-            -7.67457823e-05, 0.946977854, 0.321298748, -0.99861747, 0.0168169905, -0.0498039834)
-        workspace.ServerStuff.throwWeapon:FireServer(ToLoopDrop, nil, cframe, "drop", NewStatsTable, Uses, false,
+    end
+    game.Workspace.ServerStuff.getTPWeapon:FireServer(ToLoopDrop, AnimSet, "Fist", nil, false)
+    repeat
+        wait()
+    until game.Players.LocalPlayer.Character:FindFirstChild(ToLoopDrop) or ToLoopDrop == "" or ToLoopDrop ~= Current
+    local cframe = CFrame.new(381.598999, -1.04327154, -48.8513374, -0.0525665507, -0.320858359, 0.945667326,
+        -7.67457823e-05, 0.946977854, 0.321298748, -0.99861747, 0.0168169905, -0.0498039834)
+    workspace.ServerStuff.throwWeapon:FireServer(ToLoopDrop, nil, cframe, "drop", NewStatsTable, Uses, false, _G.Code1,
+        nil, _G.Code2)
+    wait(0.3)
+    Debounces.LoopDrop = false
+end
+if Toggles.GrenadeRain then
+    local Data = {
+        ["throwrating"] = 4,
+        ["ability"] = "Impact triggered explosive.",
+        ["animset"] = "THRW",
+        ["woundrating"] = 2,
+        ["weapontype"] = "Item",
+        ["name"] = "Impact Grenade",
+        ["damagerating"] = {
+            [1] = 0,
+            [2] = 0,
+            [3] = GrenadeRainDamage
+        },
+        ["icon"] = "2331748192",
+        ["sizerating"] = 4,
+        ["desc"] = "Formerly created  by a man from somewhere in Russia, this little explosive device can go boom upon impacting something! No idea what Russia is though."
+    }
+    local RandomX = math.random(-179, 420)
+    local RandomZ = math.random(-205, 196)
+    local Position1 = Vector3.new(RandomX, 150, RandomZ)
+    local Position2 = Vector3.new(RandomX, -100, RandomZ)
+    TargetCFrame = CFrame.new(Position1, Position2)
+    if _G.Code1 ~= nil and _G.Code2 ~= nil then
+        game.Workspace.ServerStuff.throwWeapon:FireServer("ImpN", 0, TargetCFrame, 0.1960853934288, Data, nil, false,
             _G.Code1, nil, _G.Code2)
-        wait(0.3)
-        Debounces.LoopDrop = false
     end
-    if Toggles.GrenadeRain then
-        local Data = {
-            ["throwrating"] = 4,
-            ["ability"] = "Impact triggered explosive.",
-            ["animset"] = "THRW",
-            ["woundrating"] = 2,
-            ["weapontype"] = "Item",
-            ["name"] = "Impact Grenade",
-            ["damagerating"] = {
-                [1] = 0,
-                [2] = 0,
-                [3] = GrenadeRainDamage
-            },
-            ["icon"] = "2331748192",
-            ["sizerating"] = 4,
-            ["desc"] = "Formerly created  by a man from somewhere in Russia, this little explosive device can go boom upon impacting something! No idea what Russia is though."
-        }
-        local RandomX = math.random(-179, 420)
-        local RandomZ = math.random(-205, 196)
-        local Position1 = Vector3.new(RandomX, 150, RandomZ)
-        local Position2 = Vector3.new(RandomX, -100, RandomZ)
-        TargetCFrame = CFrame.new(Position1, Position2)
-        if _G.Code1 ~= nil and _G.Code2 ~= nil then
-            game.Workspace.ServerStuff.throwWeapon:FireServer("ImpN", 0, TargetCFrame, 0.1960853934288, Data, nil,
-                false, _G.Code1, nil, _G.Code2)
+end
+
+local function GrabMainScript()
+    local Script = nil
+    for i, v in pairs(game.Players.LocalPlayer.Backpack.GetChildren(game.Players.LocalPlayer.Backpack)) do
+        if v:IsA("LocalScript") and v.Name ~= "ClickDetectorScript" then
+            Script = v
         end
     end
+    return Script
 end
 
 local function GrabEssentials()
     local FunnyPlace = getrenv()._G
-    local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+    local TempEnv = getsenv(GrabMainScript())
     repeat
         FunnyPlace = getrenv()._G
-        TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        TempEnv = getsenv(GrabMainScript())
         wait(0.3)
     until FunnyPlace["keylist"] ~= nil and TempEnv["afflictstatus"] ~= nil and TempEnv["drop_slide"] ~= nil
     wait(1)
-    if FunnyPlace["keylist"] ~= nil then
-        _G.Code1 = FunnyPlace[FunnyPlace.keylist[workspace.ServerStuff.ask:InvokeServer("mainHandler", true)]]
-    end
-    if TempEnv["afflictstatus"] ~= nil and _G.Code1 ~= nil then
+    if TempEnv["afflictstatus"] ~= nil then
         local upvalues = getupvalues(TempEnv.afflictstatus)
+        for i, v in pairs(upvalues) do
+            if _G.Code1 ~= nil then
+                break
+            end
+            if typeof(v) == "number" then
+                for x, y in pairs(FunnyPlace) do
+                    if y == v then
+                        _G.Code1 = v
+                        break
+                    end
+                end
+            end
+        end
         local CorrectIndex = math.huge
         for i, v in pairs(upvalues) do
             if v == _G.Code1 and tonumber(i) ~= nil then
@@ -1089,7 +1136,7 @@ local function ApplyGod(ungod)
 end
 
 local function HealthChanged(Health)
-    if not Toggles.Godmode then
+    if not Toggles.SemiGodmode then
         return
     end
     if Humanoid == nil or not Humanoid:FindFirstAncestor("Workspace") then
@@ -1099,6 +1146,13 @@ local function HealthChanged(Health)
         -- for i = 1,(Humanoid.MaxHealth - Health) do
         spawn(HealOnce)
         -- end
+    end
+end
+
+local function RemoveMark(child)
+    if child.Name == "playerflagged" then
+        wait(0.1)
+        child.Parent = nil
     end
 end
 
@@ -1120,7 +1174,7 @@ end
 
 local function ClipChanged()
     if Toggles.InfClip --[[ and not string.find(string.lower(ClipLabel.Text), "inf")]] then
-        local Pee = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local Pee = getsenv(GrabMainScript())
         local GetSex = getupvalues(Pee.unloadgun)
         for i, v in pairs(GetSex) do
             if typeof(v) == "table" then
@@ -1426,7 +1480,7 @@ local function SetupGUI()
     local GoodwillButton = game.Players.LocalPlayer.PlayerGui.mainHUD.TabMenu.bg.rations:Clone()
     GoodwillButton.Name = "GOODWILL"
     GoodwillButton.Parent = game.Players.LocalPlayer.PlayerGui.mainHUD.TabMenu.bg
-    GoodwillButton.Text = "VAPE V4"
+    GoodwillButton.Text = "GOODWILL"
     GoodwillButton.Position = UDim2.new(0.949999988, -340, 0.899999976, 0)
     local GoodwillTab = game.Players.LocalPlayer.PlayerGui.mainHUD.TabMenu.bg.rationstab:Clone()
     GoodwillTab:ClearAllChildren()
@@ -1667,7 +1721,14 @@ local function SetupGUI()
 
     for i, v in pairs(game.Players.LocalPlayer.PlayerGui.mainHUD.TabMenu.bg.weaponinfotab.founditem:GetChildren()) do
         if string.find(v.Name, "line") and v.Name ~= "line1" and not string.find(v.Name, "more") and
-            not string.find(v.Name, "less") then
+            not string.find(v.Name, "less") and not string.find(v.Name, "big") then
+            local Space = string.find(v.Text, ": ")
+            local StatName = ""
+            local StatPlacement = nil
+            if Space ~= nil then
+                StatName = string.sub(v.Text, 2, Space - 1)
+                StatPlacement = NameToStat[StatName]
+            end
             local NewMoreButton = MoreButton:Clone()
             local NewLessButton = LessButton:Clone()
             NewMoreButton.Parent = game.Players.LocalPlayer.PlayerGui.mainHUD.TabMenu.bg.weaponinfotab.founditem
@@ -1676,9 +1737,31 @@ local function SetupGUI()
             NewLessButton.Position = UDim2.new(0.9, 0, v.Position.Y.Scale, 0)
             NewMoreButton.Name = v.Name .. "more"
             NewLessButton.Name = v.Name .. "less"
+
+            local NewBigMore = NewMoreButton:Clone()
+            local NewBigLess = NewLessButton:Clone()
+            NewBigMore.Parent = NewMoreButton.Parent
+            NewBigLess.Parent = NewMoreButton.Parent
+            NewBigMore.Name = NewBigMore.Name .. "big"
+            NewBigLess.Name = NewBigLess.Name .. "big"
+            NewBigMore.Position = UDim2.new(0.9, 75, v.Position.Y.Scale, 0)
+            NewBigLess.Position = UDim2.new(0.9, -35, v.Position.Y.Scale, 0)
+            NewBigLess.icon.Text = "--"
+            NewBigMore.icon.Text = "++"
+
+            if StatPlacement ~= nil and StatPlacement["BigIncrement"] ~= nil then
+                NewBigMore.Visible = true
+                NewBigLess.Visible = true
+            else
+                NewBigMore.Visible = false
+                NewBigLess.Visible = false
+            end
+
             if v.Text == "" or string.find(v.Text, "RARITY") or string.find(v.Text, "HEAVY_SWING") then
                 NewMoreButton.Visible = false
                 NewLessButton.Visible = false
+                NewBigMore.Visible = false
+                NewBigLess.Visible = false
             end
             if string.find(v.Text, "TRUE") then
                 NewLessButton.Visible = false
@@ -1689,6 +1772,22 @@ local function SetupGUI()
             end
 
             v:GetPropertyChangedSignal("Text"):Connect(function()
+                local Space = string.find(v.Text, ": ")
+                local StatName = ""
+                local StatPlacement = nil
+                if Space ~= nil then
+                    StatName = string.sub(v.Text, 2, Space - 1)
+                    StatPlacement = NameToStat[StatName]
+                end
+                if StatPlacement ~= nil and StatPlacement["BigIncrement"] ~= nil then
+                    NewBigMore.Visible = true
+                    NewBigLess.Visible = true
+                    NewBigLess.icon.Text = "--"
+                    NewBigMore.icon.Text = "++"
+                else
+                    NewBigMore.Visible = false
+                    NewBigLess.Visible = false
+                end
                 if string.find(v.Text, "TRUE") then
                     NewLessButton.Visible = false
                     NewMoreButton.icon.Text = "X"
@@ -1698,6 +1797,8 @@ local function SetupGUI()
                 elseif v.Text == "" or string.find(v.Text, "RARITY") or string.find(v.Text, "HEAVY_SWING") then
                     NewLessButton.Visible = false
                     NewMoreButton.Visible = false
+                    NewBigMore.Visible = false
+                    NewBigLess.Visible = false
                 else
                     NewLessButton.Visible = true
                     NewLessButton.icon.Text = "-"
@@ -1797,6 +1898,97 @@ local function SetupGUI()
                     end
                 end
             end)
+
+            NewBigMore.MouseButton1Down:Connect(function()
+                local Label = NewBigMore.Parent:FindFirstChild(string.sub(NewBigMore.Name, 1, #NewBigMore.Name - 7))
+                if Label == nil or ShownWeapon == nil then
+                    return
+                end
+                local Space = string.find(Label.Text, ": ")
+                local StatName = string.sub(Label.Text, 2, Space - 1)
+                if NewBigMore.icon.Text == "++" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local StatPlacement = NameToStat[StatName]
+                    if NameToStat[StatName].Index ~= nil then
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat][tostring(StatPlacement.Index) .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][tostring(StatPlacement.Index) .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] +
+                                              StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] +
+                                    StatPlacement.BigIncrement
+                        end
+                    else
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat] + StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat] + StatPlacement.BigIncrement
+                        end
+                    end
+                elseif NewBigMore.icon.Text == "" then
+                    WeaponStats[ShownWeapon].auto = false
+                    NewBigMore.icon.Text = "X"
+                elseif NewBigMore.icon.Text == "X" then
+                    WeaponStats[ShownWeapon].auto = true
+                    NewBigMore.icon.Text = ""
+                end
+            end)
+
+            NewBigLess.MouseButton1Down:Connect(function()
+                local Label = NewBigLess.Parent:FindFirstChild(string.sub(NewBigLess.Name, 1, #NewBigLess.Name - 7))
+                if Label == nil or ShownWeapon == nil then
+                    return
+                end
+                local Space = string.find(Label.Text, ": ")
+                local StatName = string.sub(Label.Text, 2, Space - 1)
+                if NewBigLess.icon.Text == "--" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local StatPlacement = NameToStat[StatName]
+                    if NameToStat[StatName].Index ~= nil then
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat][tostring(StatPlacement.Index) .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][tostring(StatPlacement.Index) .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] -
+                                              StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat][StatPlacement.Index] -
+                                    StatPlacement.BigIncrement
+                        end
+                    else
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat] - StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat] - StatPlacement.BigIncrement
+                        end
+                    end
+                end
+            end)
+
         end
     end
 
@@ -1885,6 +2077,14 @@ local function SetupGUI()
     for i, v in pairs(FrameClone:GetChildren()) do
         if string.find(v.Name, "line") and v.Name ~= "line1" and not string.find(v.Name, "more") and
             not string.find(v.Name, "less") then
+            local Space = string.find(v.Text, ": ")
+            local StatName = ""
+            local StatPlacement = nil
+            if Space ~= nil then
+                StatName = string.sub(v.Text, 2, Space - 1)
+                StatPlacement = NameToStat[StatName]
+            end
+
             local NewMoreButton = MoreButton:Clone()
             local NewLessButton = LessButton:Clone()
             NewMoreButton.Parent = FrameClone
@@ -1893,6 +2093,25 @@ local function SetupGUI()
             NewLessButton.Position = UDim2.new(0.9, 0, v.Position.Y.Scale, 0)
             NewMoreButton.Name = v.Name .. "more"
             NewLessButton.Name = v.Name .. "less"
+
+            local NewBigMore = NewMoreButton:Clone()
+            local NewBigLess = NewLessButton:Clone()
+            NewBigMore.Parent = NewMoreButton.Parent
+            NewBigLess.Parent = NewMoreButton.Parent
+            NewBigMore.Name = NewBigMore.Name .. "big"
+            NewBigLess.Name = NewBigLess.Name .. "big"
+            NewBigMore.Position = UDim2.new(0.9, 75, v.Position.Y.Scale, 0)
+            NewBigLess.Position = UDim2.new(0.9, -35, v.Position.Y.Scale, 0)
+            NewBigLess.icon.Text = "--"
+            NewBigMore.icon.Text = "++"
+
+            if StatPlacement ~= nil and StatPlacement["BigIncrement"] ~= nil then
+                NewBigMore.Visible = true
+                NewBigMore.Visible = true
+            else
+                NewBigMore.Visible = false
+                NewBigLess.Visible = false
+            end
 
             NewMoreButton.MouseButton1Down:Connect(function()
                 local Label = NewMoreButton.Parent:FindFirstChild(
@@ -2021,6 +2240,135 @@ local function SetupGUI()
                     end
                 end
             end)
+
+            NewBigMore.MouseButton1Down:Connect(function()
+                local Label = NewMoreButton.Parent:FindFirstChild(
+                    string.sub(NewMoreButton.Name, 1, #NewMoreButton.Name - 4))
+                if Label == nil or ShownWeapon == nil then
+                    return
+                end
+                local Space = string.find(Label.Text, ": ")
+                local StatName = string.sub(Label.Text, 2, Space - 1)
+                if NewMoreButton.icon.Text == "+" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local StatPlacement = NameToStat[StatName]
+                    if string.find(StatName, "DAMAGE") then
+                        local Index = #WeaponStats[ShownWeapon]["damagerating"]
+                        if string.find(StatName, "LIMB") and Index ~= 3 then
+                            Index = Index - 1
+                        end
+                        WeaponStats[ShownWeapon]["damagerating"][Index] =
+                            WeaponStats[ShownWeapon]["damagerating"][Index] + StatPlacement.BigIncrement
+                    else
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat] + StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat] + StatPlacement.BigIncrement
+                        end
+                    end
+                end
+                if ShownWeapon ~= nil and ShownWeapon ~= "" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local ShownWeaponStats = WeaponStats[ShownWeapon]
+                    for x, y in pairs(FrameClone:GetChildren()) do
+                        if not string.find(y.Text, "DAMAGE") and string.find(y.Name, "line") and y.Name ~= "line1" and
+                            not string.find(y.Name, "more") and not string.find(y.Name, "less") then
+                            local Space2 = string.find(y.Text, ": ")
+                            local StatName2 = string.sub(y.Text, 2, Space2 - 1)
+                            if ShownWeaponStats[NameToStat[StatName2].Stat] ~= nil then
+                                y.Text = ">" .. StatName2 .. ": " .. ShownWeaponStats[NameToStat[StatName2].Stat]
+                            else
+                                y.Text = ">" .. StatName2 .. ": N/A"
+                            end
+                        end
+                    end
+                    if #ShownWeaponStats["damagerating"] == 2 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][1]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][2]
+                    elseif #ShownWeaponStats["damagerating"] == 3 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                    elseif #ShownWeaponStats["damagerating"] == 4 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][4]
+                    end
+                end
+            end)
+
+            NewBigLess.MouseButton1Down:Connect(function()
+                local Label = NewLessButton.Parent:FindFirstChild(
+                    string.sub(NewLessButton.Name, 1, #NewLessButton.Name - 4))
+                if Label == nil or ShownWeapon == nil then
+                    return
+                end
+                local Space = string.find(Label.Text, ": ")
+                local StatName = string.sub(Label.Text, 2, Space - 1)
+                if NewLessButton.icon.Text == "-" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local StatPlacement = NameToStat[StatName]
+                    if string.find(StatName, "DAMAGE") then
+                        local Index = #WeaponStats[ShownWeapon]["damagerating"]
+                        if string.find(StatName, "LIMB") and Index ~= 3 then
+                            Index = Index - 1
+                        end
+                        WeaponStats[ShownWeapon]["damagerating"][Index] =
+                            WeaponStats[ShownWeapon]["damagerating"][Index] - StatPlacement.BigIncrement
+                    else
+                        if WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] == nil then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat .. "old"] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat]
+                        end
+                        local Projected = WeaponStats[ShownWeapon][StatPlacement.Stat] - StatPlacement.BigIncrement
+                        if Projected <= 0 then
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] = 0
+                        else
+                            WeaponStats[ShownWeapon][StatPlacement.Stat] =
+                                WeaponStats[ShownWeapon][StatPlacement.Stat] - StatPlacement.BigIncrement
+                        end
+                    end
+                end
+                if ShownWeapon ~= nil and ShownWeapon ~= "" then
+                    if WeaponStats == nil then
+                        WeaponStats = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
+                    end
+                    local ShownWeaponStats = WeaponStats[ShownWeapon]
+                    for x, y in pairs(FrameClone:GetChildren()) do
+                        if not string.find(y.Text, "DAMAGE") and string.find(y.Name, "line") and y.Name ~= "line1" and
+                            not string.find(y.Name, "more") and not string.find(y.Name, "less") then
+                            local Space2 = string.find(y.Text, ": ")
+                            local StatName2 = string.sub(y.Text, 2, Space2 - 1)
+                            if ShownWeaponStats[NameToStat[StatName2].Stat] ~= nil then
+                                y.Text = ">" .. StatName2 .. ": " .. ShownWeaponStats[NameToStat[StatName2].Stat]
+                            else
+                                y.Text = ">" .. StatName2 .. ": N/A"
+                            end
+                        end
+                    end
+                    if #ShownWeaponStats["damagerating"] == 2 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][1]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][2]
+                    elseif #ShownWeaponStats["damagerating"] == 3 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                    elseif #ShownWeaponStats["damagerating"] == 4 then
+                        FrameClone.line2.Text = ">LIMB_DAMAGE: " .. ShownWeaponStats["damagerating"][3]
+                        FrameClone.line3.Text = ">HEAD_DAMAGE: " .. ShownWeaponStats["damagerating"][4]
+                    end
+                end
+            end)
+
         end
     end
 end
@@ -2316,13 +2664,20 @@ local function CommandHandler(msg, speaker)
     if speaker ~= game.Players.LocalPlayer then
         return
     end
-
-    if IsInTable({"god", "godmode", "ungod", "ungodmode"}, Args.Command) then
+    --[[
+    if IsInTable({"god","godmode","ungod","ungodmode"}, Args.Command) then
         local Toggle = true -- last second to default to true, rather than a toggle
         if Args[1] == "true" or Args[1] == "on" then
             Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
+        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1,2) == "un" then
             Toggle = false
+        end
+        if game.PlaceId ~= 9880062154 then
+            if Toggle then
+                game.Players:Chat(":sgod")
+            else
+                game.Players:Chat(":unsgod")
+            end
         end
         Toggles.Godmode = Toggle
         local currenttext = ""
@@ -2334,16 +2689,17 @@ local function CommandHandler(msg, speaker)
             currenttext = "God-Mode is now OFF!"
         end
         game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
+            Title = "notification";
+            Text = currenttext;
+            Icon = "rbxassetid://2541869220";
+            Duration = 3;
         })
         return
     end
+--]]
 
     if IsInTable({"semigodmode", "semigod", "sgod", "regen", "instantregen", "unsemigodmode", "unsemigod", "unsgod",
-                  "unregen", "uninstantregen"}, Args.Command) then
+                  "unregen", "uninstantregen", "god", "godmode", "ungod", "ungodmode"}, Args.Command) then
         local Toggle = true -- last second to default to true, rather than a toggle
         if Args[1] == "true" or Args[1] == "on" then
             Toggle = true
@@ -2595,9 +2951,10 @@ local function CommandHandler(msg, speaker)
         return
     end
 
-    if IsInTable({"infection", "stopinfection", "haltinfection", "virus", "blockvirus", "stopvirus", "haltvirus",
-                  "uninfection", "stopinfection", "virusblock", "unhaltinfection", "antivirus", "unvirus",
-                  "unstopvirus", "unhaltvirus", "unblockvirus", "unvirusblock", "unantivirus"}, Args.Command) then
+    if IsInTable({"infection", "stopinfection", "haltinfection", "virus", "novirus", "blockvirus", "stopvirus",
+                  "haltvirus", "uninfection", "stopinfection", "virusblock", "unhaltinfection", "antivirus", "unvirus",
+                  "unnovirus", "unstopvirus", "unhaltvirus", "unblockvirus", "unvirusblock", "unantivirus"},
+        Args.Command) then
         local Toggle = true -- last second to default to true, rather than a toggle
         if Args[1] == "true" or Args[1] == "on" then
             Toggle = true
@@ -2709,69 +3066,6 @@ local function CommandHandler(msg, speaker)
         return
     end
 
-    if IsInTable({"infclip", "infiniteclip", "infmag", "infinitemag", "infshots", "infiniteshots", "infshoot",
-                  "infiniteshoot", "bottomlessmags", "uninfclip", "uninfiniteclip", "uninfmag", "uninfinitemag",
-                  "uninfshots", "uninfiniteshots", "uninfshoot", "uninfiniteshoot", "unbottomlessmags"}, Args.Command) then
-        local Toggle = true -- last second to default to true, rather than a toggle
-        if Args[1] == "true" or Args[1] == "on" then
-            Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
-            Toggle = false
-        end
-        Toggles.InfClip = Toggle
-        local currenttext = ""
-        if Toggle == true then
-            local Pee = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
-            local GetSex = getupvalues(Pee.unloadgun)
-            for i, v in pairs(GetSex) do
-                if typeof(v) == "table" then
-                    for x, y in pairs(v) do
-                        if typeof(y) == "table" then
-                            for n, m in pairs(y) do
-                                if y[n] == tonumber(ClipLabel.Text) then
-                                    if AkimboActive then
-                                        y[n] = 20
-                                    else
-                                        y[n] = math.huge
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-            Pee = nil
-            GetSex = nil
-            currenttext = "InfMag is now ON!"
-        else
-            local Pee = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
-            local GetSex = getupvalues(Pee.unloadgun)
-            for i, v in pairs(GetSex) do
-                if typeof(v) == "table" then
-                    for x, y in pairs(v) do
-                        if typeof(y) == "table" then
-                            for n, m in pairs(y) do
-                                if tonumber(y[n]) ~= nil and tonumber(y[n]) > 1000 then
-                                    y[n] = 10
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-            Pee = nil
-            GetSex = nil
-            currenttext = "InfMag is now OFF!"
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-
     if IsInTable({"nocamerashake", "antirecoil", "anticamerashake", "norecoil", "noshake", "antishake",
                   "unnocamerashake", "unantirecoil", "unanticamerashake", "unnorecoil", "unnoshake", "unantishake"},
         Args.Command) then
@@ -2783,7 +3077,7 @@ local function CommandHandler(msg, speaker)
         end
         Toggles.AntiRecoil = Toggle
         local currenttext = ""
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local TempEnv = getsenv(GrabMainScript())
         if Toggle == true then
             local Env = require(game.Workspace.ServerStuff.Statistics.W_STATISTICS)
             for i, v in pairs(Env) do
@@ -2842,44 +3136,6 @@ local function CommandHandler(msg, speaker)
         return
     end
 
-    if IsInTable({"superrun", "superspeed", "fasterrun", "speed", "run", "unsuperrun", "unsuperspeed", "unfasterrun",
-                  "unspeed", "unrun"}, Args.Command) then
-        local Toggle = true -- last second to default to true, rather than a toggle
-        if Args[1] == "true" or Args[1] == "on" then
-            Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
-            Toggle = false
-        end
-        Toggles.SuperRun = Toggle
-        local currenttext = ""
-        if Toggle == true then
-            if RenderStepConnection == nil then
-                RenderStepConnection = game:GetService("RunService").Stepped:Connect(RenderStepped)
-            end
-            currenttext = "SuperRun is now ON!"
-        else
-            local LoopOff = false
-            for i = 1, #LoopedFeatures do
-                if Toggles[LoopedFeatures[i]] == true then
-                    LoopOff = true
-                    break
-                end
-            end
-            if RenderStepConnection ~= nil and LoopOff then
-                RenderStepConnection:Disconnect()
-                RenderStepConnection = nil
-            end
-            currenttext = "SuperRun is now OFF!"
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-
     if IsInTable({"nohunger", "nodrink", "noeat", "nothirst", "permfill", "unnohunger", "unnodrink", "unnoeat",
                   "unnothirst", "unpermfill"}, Args.Command) then
         local Toggle = true -- last second to default to true, rather than a toggle
@@ -2911,81 +3167,6 @@ local function CommandHandler(msg, speaker)
     if IsInTable({"fill", "eat", "drink", "satiate", "fillhunger", "fillstomach"}, Args.Command) then
         FoodTable.hunger = tick()
         FoodTable.thirst = tick()
-        return
-    end
-
-    if IsInTable({"autoparry", "antimelee", "meleeblock", "meleecuck", "antihit", "autoblock", "unautoparry",
-                  "unantimelee", "unmeleeblock", "unmeleecuck", "unantihit", "unautoblock"}, Args.Command) then
-        local Toggle = true -- last second to default to true, rather than a toggle
-        if Args[1] == "true" or Args[1] == "on" then
-            Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
-            Toggle = false
-        end
-        Toggles.AutoParry = Toggle
-        local currenttext = ""
-        if Toggle == true then
-            game.Workspace.ServerStuff.initiateblock:FireServer(_G.Code1, true)
-            currenttext = "AutoParry is now ON!"
-        else
-            game.Workspace.ServerStuff.initiateblock:FireServer(_G.Code1, false)
-            currenttext = "AutoParry is now OFF!"
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-
-    if IsInTable({"killaura", "murderaura", "proximitykill", "closekill", "killclose", "unkillaura", "unmurderaura",
-                  "unproximitykill", "unclosekill", "unkillclose"}, Args.Command) then
-        local Toggle = true -- last second to default to true, rather than a toggle
-        local Amount = tonumber(Args[1]) or tonumber(Args[2])
-        if Amount ~= nil then
-            KillAuraDistance = Amount
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "notification",
-                Text = "KillAura distance is now " .. tostring(Amount),
-                Icon = "rbxassetid://2541869220",
-                Duration = 3
-            })
-            return
-        end
-        if Args[1] == "true" or Args[1] == "on" then
-            Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
-            Toggle = false
-        end
-        Toggles.KillAura = Toggle
-        local currenttext = ""
-        if Toggle == true then
-            if RenderStepConnection == nil then
-                RenderStepConnection = game:GetService("RunService").Stepped:Connect(RenderStepped)
-            end
-            currenttext = "KillAura is now ON!"
-        else
-            local LoopOff = false
-            for i = 1, #LoopedFeatures do
-                if Toggles[LoopedFeatures[i]] == true then
-                    LoopOff = true
-                    break
-                end
-            end
-            if RenderStepConnection ~= nil and LoopOff then
-                RenderStepConnection:Disconnect()
-                RenderStepConnection = nil
-            end
-            currenttext = "KillAura is now OFF!"
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
         return
     end
 
@@ -3039,64 +3220,13 @@ local function CommandHandler(msg, speaker)
         return
     end
 
-    if IsInTable({"autokill", "autokillenemies", "automurder", "moneyfarm", "autoclearenemies", "autothreatclear",
-                  "autowin", "unautokill", "unautokillenemies", "unautomurder", "unmoneyfarm", "unautoclearenemies",
-                  "unautothreatclear", "unautowin"}, Args.Command) then
-        local Toggle = true -- last second to default to true, rather than a toggle
-        if Args[1] == "true" or Args[1] == "on" then
-            Toggle = true
-        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
-            Toggle = false
-        end
-        Toggles.AutoKill = Toggle
-        local currenttext = ""
-        if Toggle == true then
-            for i = 1, #Enemies do
-                if Enemies[i] ~= nil and Enemies[i]:FindFirstChild("Head") then
-                    KnifeKill(Enemies[i])
-                    wait(0.5)
-                end
-            end
-            currenttext = "AutoKill is now ON!"
-        else
-            currenttext = "AutoKill is now OFF!"
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-
-    if IsInTable({"killenemies", "killall", "removeenemies", "killothers", "enemykill", "clearenemies", "clearhazards",
-                  "enemieskill", "unkillenemies", "unkillall", "unremoveenemies", "unkillothers", "unenemykill",
-                  "unclearenemies", "unclearhazards", "unenemieskill"}, Args.Command) then
-        local Amount = tonumber(Args[1]) or math.huge
-        for i = 1, #Enemies do
-            if Enemies[i] ~= nil and Enemies[i]:FindFirstChild("Head") and
-                game.Players.LocalPlayer:DistanceFromCharacter(Enemies[i].Head.Position) <= Amount then
-                KnifeKill(Enemies[i])
-                wait(0.5)
-            end
-        end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = "Killed all enemies!",
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-
     if IsInTable({"equipbackpack", "backpack", "enablebackpack", "expandinventory", "addbackpack"}, Args.Command) then
         -- game.Workspace.ServerStuff.dealDamage:FireServer("putbackpack", nil, _G.Code1, _G.Code2);
         game.Players.LocalPlayer.PlayerGui.mainHUD.InventoryFrame.slot6.Visible = true;
         game.Players.LocalPlayer.PlayerGui.mainHUD.InventoryFrame.slot5.Visible = true;
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local TempEnv = getsenv(GrabMainScript())
         local TempUpValues = getupvalues(TempEnv.start_dual_wield)
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local TempEnv = getsenv(GrabMainScript())
         local TempUpValues = getupvalues(TempEnv.start_dual_wield)
         local InvTable = nil
         for i, v in pairs(TempUpValues) do
@@ -3126,7 +3256,7 @@ local function CommandHandler(msg, speaker)
             game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
             WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
         end
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local TempEnv = getsenv(GrabMainScript())
         local TempUpValues = getupvalues(TempEnv.start_dual_wield)
         local InvTable = nil
         for i, v in pairs(TempUpValues) do
@@ -3202,85 +3332,7 @@ local function CommandHandler(msg, speaker)
         print("==========================")
         return
     end
-    --[[
-    if IsInTable({"teamkill","enemy","nemesis","scavmode","enemymode"}, Args.Command) then
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
-        local TempUpValues = getupvalues(TempEnv.start_dual_wield)
-        local InvTable = nil
-        for i,v in pairs(TempUpValues) do
-            if typeof(v) == "table" and v[1] ~= nil and typeof(v[1]) == "table" and typeof(v[1][1]) == "string" and typeof(v[1][2]) == "boolean" then
-                InvTable = v
-                break
-            end
-        end
-        local OldMelee = InvTable[1][1] -- this is gonna be SCUFFED
-        InvTable[1] = { "PLBlade", false, nil}
 
-        local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets:FindFirstChild(WeaponStats["PLBlade"].animset)
-        game.Workspace.ServerStuff.getTPWeapon:FireServer("PLBlade", AnimSet, "Fist")
-        local NewModel = game.Players.LocalPlayer.Character:WaitForChild("PLBlade", 20)
-        game.Workspace.ServerStuff.claimItem:InvokeServer(NewModel)
-        game.Workspace.ServerStuff.getTPWeapon:FireServer("PLBlade", AnimSet, "Fist", NewModel, true)
-        wait(0.3)
-        keypress(0x31)
-        keyrelease(0x31)
-        wait(0.6)
-        InvTable[1] = {"Fist", false, nil}
-        wait()
-        keypress(0x31)
-        keyrelease(0x31)
-        if game.Players.LocalPlayer.Character ~= nil and game.Players.LocalPlayer.Character:FindFirstChild("hasPrimary") then
-            game.Players.LocalPlayer.Character.hasPrimary:Destroy()
-        end
-        wait(0.1)
-        if OldMelee ~= "Fist" then
-            local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets:FindFirstChild(WeaponStats[OldMelee].animset)
-            game.Workspace.ServerStuff.getTPWeapon:FireServer(OldMelee, AnimSet, "Fist")
-            local NewModel = game.Players.LocalPlayer.Character:WaitForChild("PLBlade", 20)
-            game.Workspace.ServerStuff.claimItem:InvokeServer(NewModel)
-            game.Workspace.ServerStuff.getTPWeapon:FireServer(OldMelee, AnimSet, "Fist", NewModel, true)
-            wait(0.3)
-            keypress(0x31)
-            keyrelease(0x31)
-        end
-        InvTable = nil
-        TempEnv = nil
-        TempUpValues = nil
-        return
-    end
---]]
-    --[[
-    if IsInTable({"airstrike","carpetbomb","bombrun","dronestrike"}, Args.Command) then
-        local Data = {
-        	["throwrating"] = 4,
-        	["ability"] = "Impact triggered explosive.",
-        	["animset"] = "THRW",
-        	["woundrating"] = 2,
-        	["weapontype"] = "Item",
-        	["name"] = "Impact Grenade",
-        	["damagerating"] = {
-        		[1] = 0,
-        		[2] = 0,
-        		[3] = Args[1] or 150
-        	},
-        	["icon"] = "2331748192",
-        	["sizerating"] = 4,
-        	["desc"] = "Formerly created  by a man from somewhere in Russia, this little explosive device can go boom upon impacting something! No idea what Russia is though."
-        }
-        for x = -179,420 do
-            if x%5 == 0 then
-                for z = -205,196 do
-                    if z%5 == 0 and _G.Code1 ~= nil and _G.Code2 ~= nil then
-                        local Position1 = Vector3.new(x,150,z)
-                        local Position2 = Vector3.new(x,-100,z)
-                        TargetCFrame = CFrame.new(Position1,Position2)
-                        game.Workspace.ServerStuff.throwWeapon:FireServer("ImpN", 0, TargetCFrame, 0.1960853934288, Data, nil, false, _G.Code1, nil, _G.Code2)
-                    end
-                end
-            end
-        end
-    end
---]]
     if IsInTable({"infaux", "auxinf", "infauxiliary", "aux", "auxiliary", "uninfaux", "unauxinf", "uninfauxiliary",
                   "unaux", "unauxiliary"}, Args.Command) then
         local Toggle = true
@@ -3294,7 +3346,7 @@ local function CommandHandler(msg, speaker)
         if Toggle == true then
             currenttext = "InfAux is now ON!"
         else
-            local Env = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+            local Env = getsenv(GrabMainScript())
             Env["aux_usage"] = 1
             currenttext = "InfAux is now OFF!"
         end
@@ -3307,7 +3359,7 @@ local function CommandHandler(msg, speaker)
         return
     end
 
-    if IsInTable({"settrap", "trapset", "picktrap"}, Args.Command) then
+    if IsInTable({"settrap", "trapset", "picktrap", "setrap"}, Args.Command) then
         if Args[1] == nil then
             return
         end
@@ -3320,6 +3372,29 @@ local function CommandHandler(msg, speaker)
         game.StarterGui:SetCore("SendNotification", {
             Title = "notification",
             Text = "Trap type set to " .. string.lower(CurrentTrap),
+            Icon = "rbxassetid://2541869220",
+            Duration = 3
+        })
+        return
+    end
+
+    if IsInTable({"setthrowable", "throwableset", "pickthrowable", "sethrowable", "setthrow", "throwset", "pickthrow",
+                  "sethrow", "setykey", "ykey"}, Args.Command) then
+        if Args[1] == nil then
+            return
+        end
+        Toggles.ThrowingKnives = false
+        local TrapTitle = ""
+        for i, v in pairs(Throwables) do
+            if string.sub(string.lower(i), 1, #Args[1]) == string.lower(Args[1]) then
+                CurrentThrowable = v
+                TrapTitle = i
+                break
+            end
+        end
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "notification",
+            Text = "Throwable type set to " .. string.lower(TrapTitle),
             Icon = "rbxassetid://2541869220",
             Duration = 3
         })
@@ -3340,7 +3415,7 @@ local function CommandHandler(msg, speaker)
             game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
             WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
         end
-        local TempEnv = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+        local TempEnv = getsenv(GrabMainScript())
         local TempUpValues = getupvalues(TempEnv.start_dual_wield)
         local InvTable = nil
         for i, v in pairs(TempUpValues) do
@@ -3419,6 +3494,45 @@ local function CommandHandler(msg, speaker)
         return
     end
 
+    if IsInTable({"antivotekick", "antivk", "novk", "vkblock", "votekickblock", "blockvotekick", "novotekick",
+                  "blockvk", "unantivotekick", "unantivk", "unnovk", "unvkblock", "unvotekickblock", "unblockvotekick",
+                  "unnovotekick", "unblockvk"}, Args.Command) then
+        local Toggle = true
+        if Args[1] == "true" or Args[1] == "on" then
+            Toggle = true
+        elseif Args[1] == "false" or Args[1] == "off" or string.sub(Args.Command, 1, 2) == "un" then
+            Toggle = false
+        end
+        Toggles.AntiVoteKick = Toggle
+        local currenttext = ""
+        if Toggle == true then
+            if RenderStepConnection == nil then
+                RenderStepConnection = game:GetService("RunService").Stepped:Connect(RenderStepped)
+            end
+            currenttext = "AntiVoteKick is now ON!"
+        else
+            local LoopOff = false
+            for i = 1, #LoopedFeatures do
+                if Toggles[LoopedFeatures[i]] == true then
+                    LoopOff = true
+                    break
+                end
+            end
+            if RenderStepConnection ~= nil and LoopOff then
+                RenderStepConnection:Disconnect()
+                RenderStepConnection = nil
+            end
+            currenttext = "AntiVoteKick is now OFF!"
+        end
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "notification",
+            Text = currenttext,
+            Icon = "rbxassetid://2541869220",
+            Duration = 3
+        })
+        return
+    end
+
 end
 
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
@@ -3437,208 +3551,113 @@ game.Players.PlayerAdded:Connect(function(v)
     end)
 end)
 
-mouse.KeyDown:Connect(function(key)
-    if key == "0" then
-        SuperRun.ShiftHeld = true
-        return
-    end
-    if key == "w" then
-        SuperRun.WHeld = true
-        return
-    end
-    if key == "s" then
-        SuperRun.SHeld = true
-        return
-    end
-    if key == "a" then
-        SuperRun.AHeld = true
-        return
-    end
-    if key == "d" then
-        SuperRun.DHeld = true
-        return
-    end
-    if key == "l" then
-        Toggles.SuperRun = not Toggles.SuperRun
-        local currenttext = ""
-        if Toggles.SuperRun == true then
-            if RenderStepConnection == nil then
-                RenderStepConnection = game:GetService("RunService").Stepped:Connect(RenderStepped)
+if key == "y" and _G.Code1 ~= nil and _G.Code2 ~= nil then
+    if CurrentThrowable == "TKnife" then
+        Toggles.ThrowingKnives = true
+        repeat
+            if WeaponStats == nil and game.Workspace:FindFirstChild("ServerStuff") and
+                game.Workspace.ServerStuff:FindFirstChild("Statistics") and
+                game.Workspace.ServerStuff.Statistics:FindFirstChild("W_STATISTICS") then
+                WeaponStats = require(game.Workspace.ServerStuff.Statistics["W_STATISTICS"])
             end
-            currenttext = "SuperRun is now ON!"
-        else
-            local LoopOff = false
-            for i = 1, #LoopedFeatures do
-                if Toggles[LoopedFeatures[i]] == true then
-                    LoopOff = true
-                    break
-                end
-            end
-            if RenderStepConnection ~= nil and LoopOff then
-                RenderStepConnection:Disconnect()
-                RenderStepConnection = nil
-            end
-            currenttext = "SuperRun is now OFF!"
+            local Data = WeaponStats["TKnife"]
+            local CameraCFrame = game.Workspace.CurrentCamera.CFrame
+            local Position = CFrame.new(CameraCFrame.p + Vector3.new(math.random(-12, 12), math.random(-3, 12), 5),
+                mouse.Hit.p)
+            spawn(function()
+                workspace.ServerStuff.throwWeapon:FireServer("TKnife", 1000, Position, 0.19341856241226196, Data, 0,
+                    false, _G.Code1, nil, _G.Code2)
+            end)
+            wait(0.0000000000000000001)
+        until Toggles.ThrowingKnives == false
+    else
+        if Debounces.Throwing then
+            return
         end
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = currenttext,
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-    if key == "-" then
-        SuperRun.RunSpeed = SuperRun.RunSpeed - 0.1
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = "Your Super-Run speed is now " .. tostring(SuperRun.RunSpeed) .. "!",
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-    if key == "=" then
-        SuperRun.RunSpeed = SuperRun.RunSpeed + 0.1
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "notification",
-            Text = "Your Super-Run speed is now " .. tostring(SuperRun.RunSpeed) .. "!",
-            Icon = "rbxassetid://2541869220",
-            Duration = 3
-        })
-        return
-    end
-    if key == "y" and _G.Code1 ~= nil and _G.Code2 ~= nil then
-        local Data = {
-            ["throwrating"] = 4,
-            ["ability"] = "Impact triggered explosive.",
-            ["animset"] = "THRW",
-            ["woundrating"] = 2,
-            ["weapontype"] = "Item",
-            ["name"] = "Impact Grenade",
-            ["damagerating"] = {
-                [1] = 0,
-                [2] = 0,
-                [3] = 150
-            },
-            ["icon"] = "2331748192",
-            ["sizerating"] = 4,
-            ["desc"] = "Formerly created  by a man from somewhere in Russia, this little explosive device can go boom upon impacting something! No idea what Russia is though."
-        }
-        game.Workspace.ServerStuff.throwWeapon:FireServer("ImpN", 0, game.Workspace.CurrentCamera.CFrame,
-            0.1960853934288, Data, nil, false, _G.Code1, nil, _G.Code2)
-        return
-    end
-    --[[
-    if key == "j" and _G.Code1 ~= nil and _G.Code2 ~= nil then
-        local Data = {
-        	["throwrating"] = 0,
-        	["ability"] = "Impact triggered explosive.",
-        	["animset"] = "THRW",
-        	["woundrating"] = 0,
-        	["weapontype"] = "Item",
-        	["name"] = "Impact Grenade",
-        	["damagerating"] = {
-        		[1] = 0,
-        		[2] = 0,
-        		[3] = -math.huge
-        	},
-        	["icon"] = "2331748192",
-        	["sizerating"] = 0,
-        	["desc"] = "Formerly created  by a man from somewhere in Russia, this little explosive device can go boom upon impacting something! No idea what Russia is though."
-        }
-        game.Workspace.ServerStuff.throwWeapon:FireServer("ImpN", 0, game.Workspace.CurrentCamera.CFrame, 0.1960853934288, Data, nil, false, _G.Code1, nil, _G.Code2)
-        return
-    end
---]]
-    if key == "c" and Toggles.InfAux then
-        local Env = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
-        if Env["aux_usage"] ~= nil and Env["aux_usage"] <= 0 then
-            if Env["use_aux"] ~= nil then
-                Env["aux_usage"] = math.huge
-                wait()
-                Env["use_aux"]()
-            end
+        Debounces.Throwing = true
+        local AnimSet = game.ReplicatedStorage.animationSets.TPanimSets.global
+        repeat
+            game.Workspace.ServerStuff.getTPWeapon:FireServer(CurrentThrowable, AnimSet, "Fist", nil, false)
+            wait()
+        until game.Players.LocalPlayer.Character:WaitForChild(CurrentThrowable, 5)
+        local Data = WeaponStats[CurrentThrowable]
+        if game.Players.LocalPlayer.Character:FindFirstChild(CurrentThrowable) and Data ~= nil then
+            workspace.ServerStuff.throwWeapon:FireServer(CurrentThrowable, 0, game.Workspace.CurrentCamera.CFrame,
+                0.19530236721038818, Data, 1, false, _G.Code1, nil, _G.Code2)
         end
-        Env = nil
-        return
+        Debounces.Throwing = false
     end
-    if key == "u" and _G.Code1 ~= nil and _G.Code2 ~= nil and Debounces.Trap == false then
-        Debounces.Trap = true
-        if not game.Players.LocalPlayer.Character:FindFirstChild(CurrentTrap) then
-            local TrapItemName = TrapToItemName[CurrentTrap]
-            local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets.global
-            game.Workspace.ServerStuff.getTPWeapon:FireServer(TrapItemName, AnimSet, "Fist", nil, false)
-            repeat
-                wait()
-            until game.Players.LocalPlayer.Character:FindFirstChild(TrapItemName)
-        end
-        game.Workspace.ServerStuff.deployTrap:FireServer(CurrentTrap, _G.Code1, _G.Code2)
-        wait(0.8)
-        Debounces.Trap = false
-        return
-    end
-    if key == "n" then
-        if Humanoid ~= nil and Humanoid:FindFirstAncestor("Workspace") then
-            if Humanoid.Health < Humanoid.MaxHealth then
-                -- for i = 1,(Humanoid.MaxHealth - Humanoid.Health) do
-                spawn(HealOnce)
-                -- end
-            end
-        end
-        if EffectsTable == nil then
-            GrabEssentials()
-        end
-        for i, v in pairs(EffectsTable) do
-            if not string.find(i, "Virus") and v["effects"] ~= nil and typeof(v.effects) == "table" and
-                v.effects["currentduration"] ~= nil and typeof(v.effects) ~= "Color3" and v.effects.colour ~= nil then
-                if v.effects.colour == Color3.new(1, 0.05, 0.05) or v.effects.colour == false or i == "Burning" or i ==
-                    "Exhaustion" then
-                    v.effects.currentduration = 0
-                end
-            end
-        end
-        return
-    end
-    if key == "m" then
-        if EffectsTable == nil then
-            GrabEssentials()
-        end
-        for i, v in pairs(EffectsTable) do
-            if not string.find(i, "Virus") and v["effects"] ~= nil and typeof(v.effects) == "table" and
-                v.effects["currentduration"] ~= nil and typeof(v.effects) ~= "Color3" and v.effects.colour ~= nil then
-                if v.effects.colour == false or i == "Burning" or i == "Exhaustion" or v.effects.colour ==
-                    Color3.new(1, 0.05, 0.05) then
-                    v.effects.currentduration = 0
-                end
-            end
-        end
-        return
-    end
-end)
+    return
+end
 
-mouse.KeyUp:Connect(function(key)
-    if key == "0" then
-        SuperRun.ShiftHeld = false
-        return
+if key == "c" and Toggles.InfAux then
+    local Env = getsenv(GrabMainScript())
+    if Env["aux_usage"] ~= nil and Env["aux_usage"] <= 0 then
+        if Env["use_aux"] ~= nil then
+            Env["aux_usage"] = math.huge
+            wait()
+            Env["use_aux"]()
+        end
     end
-    if key == "w" then
-        SuperRun.WHeld = false
-        return
+    Env = nil
+    return
+end
+if key == "u" and _G.Code1 ~= nil and _G.Code2 ~= nil and Debounces.Trap == false then
+    Debounces.Trap = true
+    if not game.Players.LocalPlayer.Character:FindFirstChild(CurrentTrap) then
+        local TrapItemName = TrapToItemName[CurrentTrap]
+        local AnimSet = game:GetService("ReplicatedStorage").animationSets.TPanimSets.global
+        game.Workspace.ServerStuff.getTPWeapon:FireServer(TrapItemName, AnimSet, "Fist", nil, false)
+        repeat
+            wait()
+        until game.Players.LocalPlayer.Character:FindFirstChild(TrapItemName)
     end
-    if key == "s" then
-        SuperRun.SHeld = false
-        return
+    game.Workspace.ServerStuff.deployTrap:FireServer(CurrentTrap, _G.Code1, _G.Code2)
+    wait(0.8)
+    Debounces.Trap = false
+    return
+end
+if key == "n" then
+    if Humanoid ~= nil and Humanoid:FindFirstAncestor("Workspace") then
+        if Humanoid.Health < Humanoid.MaxHealth then
+            -- for i = 1,(Humanoid.MaxHealth - Humanoid.Health) do
+            spawn(HealOnce)
+            -- end
+        end
     end
-    if key == "a" then
-        SuperRun.AHeld = false
-        return
+    if EffectsTable == nil then
+        GrabEssentials()
     end
-    if key == "d" then
-        SuperRun.DHeld = false
-        return
+    for i, v in pairs(EffectsTable) do
+        if not string.find(i, "Virus") and v["effects"] ~= nil and typeof(v.effects) == "table" and
+            v.effects["currentduration"] ~= nil and typeof(v.effects) ~= "Color3" and v.effects.colour ~= nil then
+            if v.effects.colour == Color3.new(1, 0.05, 0.05) or v.effects.colour == false or i == "Burning" or i ==
+                "Exhaustion" then
+                v.effects.currentduration = 0
+            end
+        end
     end
-end)
+    return
+end
+if key == "m" then
+    if EffectsTable == nil then
+        GrabEssentials()
+    end
+    for i, v in pairs(EffectsTable) do
+        if not string.find(i, "Virus") and v["effects"] ~= nil and typeof(v.effects) == "table" and
+            v.effects["currentduration"] ~= nil and typeof(v.effects) ~= "Color3" and v.effects.colour ~= nil then
+            if v.effects.colour == false or i == "Burning" or i == "Exhaustion" or v.effects.colour ==
+                Color3.new(1, 0.05, 0.05) then
+                v.effects.currentduration = 0
+            end
+        end
+    end
+    return
+end
+
+if key == "y" and _G.Code1 ~= nil and _G.Code2 ~= nil then
+    Toggles.ThrowingKnives = false
+end
 
 repeat
     wait()
@@ -3646,17 +3665,18 @@ until game.Players.LocalPlayer.Character ~= nil
 repeat
     wait()
 until game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+repeat
+    wait()
+until game.Players.LocalPlayer.Character:FindFirstChild("Head")
 
 Humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
 
 Humanoid.HealthChanged:Connect(HealthChanged)
+game.Players.LocalPlayer.Character.Head.ChildAdded:Connect(RemoveMark)
 
 repeat
     wait()
 until game.Workspace:FindFirstChild("activePlayers")
-game.Workspace.activePlayers.ChildAdded:Connect(function(child)
-    -- print("PISSSSSSSSSS")
-end)
 
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
     _G.Code1 = nil
@@ -3665,7 +3685,13 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
         wait()
     until character:FindFirstChild("Humanoid")
     Humanoid = character:FindFirstChild("Humanoid")
-    -- print("peesuck")
+    repeat
+        wait()
+    until character:FindFirstChild("Head")
+    character.Head.ChildAdded:Connect(RemoveMark)
+    for i, v in pairs(character.Head:GetChildren()) do
+        RemoveMark(v)
+    end
     Humanoid.HealthChanged:Connect(HealthChanged)
     repeat
         wait()
@@ -3678,7 +3704,7 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
     until game.Players.LocalPlayer.PlayerGui:FindFirstChild("mainHUD")
     repeat
         wait()
-    until game.Players.LocalPlayer.Backpack:FindFirstChild("mainHandler")
+    until game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("LocalScript")
     repeat
         wait()
     until game.Players.LocalPlayer.PlayerGui.mainHUD:FindFirstChild("HealthFrame")
@@ -3744,7 +3770,7 @@ repeat
 until game.Players.LocalPlayer:FindFirstChild("Backpack")
 repeat
     wait()
-until game.Players.LocalPlayer.Backpack:FindFirstChild("mainHandler")
+until game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("LocalScript")
 
 if game.Players.LocalPlayer.Character ~= nil then
     GrabEssentials()
@@ -3851,7 +3877,7 @@ game.Workspace.DescendantAdded:Connect(function(v)
         if string.find(v.Name, "AKIMBO") then
             AkimboActive = true
             v.AncestryChanged:Connect(AkimboChanged)
-            local Pee = getsenv(game.Players.LocalPlayer.Backpack.mainHandler)
+            local Pee = getsenv(GrabMainScript())
             local GetSex = getupvalues(Pee.unloadgun)
             for i, v in pairs(GetSex) do
                 if typeof(v) == "table" then
@@ -3878,100 +3904,101 @@ game.Workspace.DescendantAdded:Connect(function(v)
     elseif v:IsA("Model") and v:FindFirstAncestor("FPArms") and v.Name ~= "LeftArm" and v.Name ~= "RightArm" then
         ShownWeapon = v.Name
     end
-    if v.Parent ~= nil and v.Parent.Name == "activeHostiles" or v.Parent ~= nil and v.Parent.Name == "NoTarget" then
-        if v:IsA("Model") then
+end)
+
+game.Players.ChildAdded:Connect(function(child)
+    if child:IsA("Model") then
+        local NpcValue = child:WaitForChild("npc")
+        if NpcValue.Value == nil then
+            NpcValue.Changed:Wait()
+        end
+        local Model = NpcValue.Value
+        if Model:IsA("Model") then
             if Toggles.AutoKill then
-                Kill(v)
+                local Torso = Model:WaitForChild("Torso", 20)
+                local Torso = Model:WaitForChild("Humanoid", 20)
+                KnifeKill(Model, true)
                 return
             end
-            table.insert(Enemies, v)
+            table.insert(Enemies, Model)
         end
     end
 end)
-
-SetupGUI()
-
+print("so what the fuck")
 repeat
     wait()
 until _G.Code1 ~= nil and _G.Code2 ~= nil
-
+print("so what the fuck 2")
 if _G.Code1 ~= nil and _G.Code2 ~= nil then
     game.StarterGui:SetCore("SendNotification", {
-        Title = 'VAPE V4',
-        Text = "Sucessfully Injected, F9 FOR CMDS                    (Formerly created by a man)",
-        Icon = "rbxassetid://6712031772",
-        Duration = 3
+        Text = "okay cool",
+        Icon = "rbxassetid://2541869220",
+        Duration = 4
     })
+    wait(10)
     print([[
 
 COMMANDS CAN BE DONE AS /e command OR :command
 
-:god - Gives you an obscene amount of health (VERY obvious to teammates)
-:ungod - Brings you back to normal health
 
-:sgod - Regens you when you take damage. (Won't save you from dynamite)
-:unsgod -- Turns off semi godmode
+:nodebuff - Blocks all status effects. Moral, burning, bleeding, broken limbs, etc
+:unnodebuff - Turns off no-debuff
 
-]])
+:nocooldown - Removes all ability cooldowns (F key, assuming you have a perk equipped) (Also gives you inf auxiliary, which is the C key)
+:cooldown - Sets your cooldowns back to normal
+
+:AMMOTYPE NUMBER - sets your stash of AMMOTYPE to NUMBER (:light 50) (shells 20)
+:FOODTYPE NUMBER - sets your stash of FOODTYPE to NUMBER (:mre 20) (:water 5) (:beans 60) (:cola 200)
+
+:stopvirus - halts your virus progression
+:resetvirus - resets your current virus progression (will not revert stages)
+
+
+:norecoil - stops your camera from shaking
+:unnorecoil - turns off no recoil
+
+:nofalldamage - counters fall damage
+:unnofalldamage - uncounters fall damage
+
+:nohunger - makes your hunger and thirst bar last indefinitely
+:unnohunger - removes no hunger
+:fill - fills your hunger and thirst bar
+
+:backpack - Gives you a backpack (gives you 2 more inventory slots)
+
+:spawn WEAPONNAME - gives you WEAPONNAME (cannot be dropped) (guns require an empty slot)
+:weaponnames - prints all the available weapon names in the dev console
+
+
+:infaux - Gives you infinite auxiliary equipment (Activated with C Key)
+:uninfaux - Turns off infaux
+
+:settrap TRAPNAME - sets the trap that gets placed when you press the U key
+
+:setthrow THROWABLENAME - sets the throwable that's thrown when you press the Y key
+
+:uses NUMBER - sets the uses / magazine of your current item to NUMBER
+
+:cig - makes you super cool
+:uncig - frees you of your nicotine addiction]])
 else
-    game.StarterGui:SetCore("SendNotification", {
-        Title = 'FAILED',
-        Text = "SOMETHING WENT FUCKO (FAILED TO GRAB REMOTE SECURITY CODES)",
-        Icon = "rbxassetid://6712031772",
-        Duration = 3
-    })
+    print('failed')
+
+    SetupGUI()
 end
 
-game.StarterGui:SetCore("SendNotification", {
-    Title = 'Force Reset',
-    Text = "Press U to force reset.                (Only use during looting phase.)",
-    Duration = 3
-})
-
-local mouse = game.Players.LocalPlayer:GetMouse()
-mouse.KeyUp:Connect(function(key)
-    if key == "u" then
-        game:GetService("Workspace").ServerStuff.deathPlay:FireServer()
+function a()
+    local script = nil
+    for _, instance in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if instance:IsA("LocalScript") and instance.Name ~= "ClickDetectorScript" then
+            script = instance
+            break
+        end
     end
-end)
-
-wait(8)
-
-repeat
-    wait()
-until game.Players.LocalPlayer ~= nil
-repeat
-    wait()
-until game.Players.LocalPlayer.Character ~= nil
-repeat
-    wait()
-until game.Players.LocalPlayer.Character:FindFirstChild("Head")
-local function CheckForMark(child)
-    if child.Name == "playerflagged" then
-        game.StarterGui:SetCore("SendNotification", {
-            Title = 'BAN',
-            Text = "Anticheat flagged you.",
-            Icon = "rbxassetid://8424844282",
-            Duration = 4
-        })
-    end
+    return script
 end
 
-game.Players.LocalPlayer.Character.Head.ChildAdded:Connect(CheckForMark)
-game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    repeat
-        wait()
-    until character:FindFirstChild("Head")
-    character.Head.ChildAdded:Connect(CheckForMark)
-end)
-for i, v in pairs(game.Players.LocalPlayer.Character.Head:GetChildren()) do
-    if v.Name == "playerflagged" then
-        game.StarterGui:SetCore("SendNotification", {
-            Title = 'Flagged.',
-            Text = "You're flagged kid.",
-            Icon = "rbxassetid://8424844282",
-            Duration = 5
-        })
-    end
+while true do
+    getsenv(a()).aux_usage = math.huge
+    wait(1)
 end
--- game:GetService("Workspace").activePlayers.USERNAME.Head.playerflagged
