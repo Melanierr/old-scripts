@@ -1,3 +1,4 @@
+if game.PlaceId ~= 7551121821 and game.PlaceId ~= 9880062154 then
 local eff = require(game:GetService("Workspace").ServerStuff.Statistics["S_STATISTICS"])
 if eff then
     eff.RespA.dur = 120
@@ -5,7 +6,7 @@ if eff then
     eff.Exha.dur = 0
     eff.Crp.dur = 0
     eff.Bld.dur = 0
-    eff.HeavBld.intensity = 9999
+    eff.HeavBld.dur = 0
     eff.Stealth.dur = 400
     eff.Vcd.dur = 0
     eff.Brz.dur = 240
@@ -21,10 +22,7 @@ if eff then
     eff.Snr.dur = 0
     eff.Tnt.dur = 0
     eff.Slc.dur = 20
-
-end
-
-local aux2 = require(game:GetService("Workspace").ServerStuff.Statistics["AUX_STATISTICS"])
-if aux2 then
-    aux2.v2.use_per_night = math.huge
+    eff.Rgn.dur = 360
+    eff.Bnd.dur = 0
+    end 
 end
