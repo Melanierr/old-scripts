@@ -1,4 +1,3 @@
-if game.PlaceId ~= 7551121821 and game.PlaceId ~= 9880062154 then
 local eff = require(game:GetService("Workspace").ServerStuff.Statistics["S_STATISTICS"])
 if eff then
     eff.RespA.dur = 120
@@ -24,5 +23,4 @@ if eff then
     eff.Slc.dur = 20
     eff.Rgn.dur = 360
     eff.Bnd.dur = 0
-    end 
-end
+    end
