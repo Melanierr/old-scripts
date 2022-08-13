@@ -30,12 +30,6 @@ local args = {
     [3] = 30515
 }
 
-game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack(args))
-local args = {
-    [1] = workspace.InteractablesNoDel.Unlock,
-    [2] = "unlockthing",
-    [3] = 30515
-}
 wait(1)
 
 game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack(args))
@@ -59,6 +53,6 @@ game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack
 wait(5)
 game.StarterGui:SetCore("SendNotification", {
     Text = "True Ending is ready.",
-    Icon = "rbxassetid://2541869220",
+    Icon = "rbxassetid://9327507252",
     Duration = 4
 })
