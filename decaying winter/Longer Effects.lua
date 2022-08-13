@@ -28,6 +28,6 @@ wait(5)
 
 game.StarterGui:SetCore("SendNotification", {
     Text = "Buffs are longer now.",
-    Icon = "rbxassetid://2541869220",
+    Icon = "rbxassetid://9327507252",
     Duration = 4
 })
