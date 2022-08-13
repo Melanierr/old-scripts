@@ -51,8 +51,3 @@ local args = {
 game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack(args))
 
 wait(5)
-game.StarterGui:SetCore("SendNotification", {
-    Text = "True Ending is ready.",
-    Icon = "rbxassetid://9327507252",
-    Duration = 4
-})
