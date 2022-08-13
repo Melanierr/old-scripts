@@ -1,5 +1,3 @@
---// Variables
-
 --// Services
 local args = {
     [1] = workspace.InteractablesNoDel.Touch,
@@ -23,6 +21,8 @@ wait(1)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(400, -3, -16))
 wait(0.3)
 game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack(args))
+wait(5)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(72, -3, -198))
 wait(1)
 local args = {
     [1] = workspace.InteractablesNoDel.Unlock,
@@ -30,10 +30,8 @@ local args = {
     [3] = 30515
 }
 
-wait(1)
-
 game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(unpack(args))
-wait(1)
+wait(3)
 local args = {
     [1] = workspace.InteractablesNoDel.Activate,
     [2] = "activatething",
