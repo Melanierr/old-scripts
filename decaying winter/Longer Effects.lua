@@ -24,10 +24,4 @@ if eff then
     eff.Rgn.dur = 360
     eff.Bnd.dur = 0
     end
-wait(5)
 
-game.StarterGui:SetCore("SendNotification", {
-    Text = "Buffs are longer now.",
-    Icon = "rbxassetid://9327507252",
-    Duration = 4
-})
