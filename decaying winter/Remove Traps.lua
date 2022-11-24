@@ -1,5 +1,5 @@
-
-
-for i,e in pairs(game.Workspace.Interactables.ScavTraps:GetChildren()) do
-  e.CFrame = CFrame.new(200, 200, 200)
+for _, trap in pairs(game.Workspace.Interactables.ScavTraps:GetDescendants()) do
+  if trap:IsA("Part") or trap:IsA("Mesh") then
+    trap.CanCollide = false
+  end
 end
