@@ -66,8 +66,7 @@ UserInputService.InputBegan:Connect(function(input, Typing)
 	        end
 	end
 end)
-
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Longer%20Effects.lua"))()
 --// stun
 UserInputService.InputBegan:Connect(function(input, Typing)
     if Typing then
@@ -141,45 +140,10 @@ UserInputService.InputBegan:Connect(function(input, Typing)
 	    end
 	end
 end)
-wait(3)
-
-
 --// controlsGui
 gui.Enabled = false
 loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Announce.lua"))()
-while true do
-    getkey()
-    wait(1)
-end
-while true do
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= localplayer then 
-            player.Character.Parent = game.Workspace
-        end
-    wait()
-    end
-end
-loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Longer%20Effects.lua"))()
-wait()
-function Callback(answer)
-    if answer == "Yes" then
-        workspace.ServerStuff.playAudio:FireServer({ [1] = "songs", [2] = "holdout_bosses"}, "sledge", game.Workspace)
-    elseif answer == "No" then
-        print("Player rejected.")
-    end
-end
-local Bindable = Instance.new("BindableFunction")
-Bindable.OnInvoke = Callback
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Music";
-    Text = {"Want some SQ music?                  ( holdout )"};
-    Duration = "20";
-    Button1 = "Yes";
-    Button2 = "No";
-    Icon = "rbxassetid://2541869220";
-    Callback = Bindable
-})
-wait(5)
+wait(1)
 function Callback(answer)
     if answer == "Yes" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Auto%20Finish.lua"))()
@@ -198,3 +162,13 @@ game.StarterGui:SetCore("SendNotification", {
     Icon = "rbxassetid://11151804229";
     Callback = Bindable
 })
+while true do
+    getkey()
+    wait(1)
+end
+wait(5)
+for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= localplayer then 
+            player.Character.Parent = game.Workspace
+        end
+    end
