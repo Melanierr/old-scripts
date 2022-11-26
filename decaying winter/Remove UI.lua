@@ -3,8 +3,7 @@
 local topbar = game:GetService("Players").LocalPlayer.PlayerGui.topbarkek.frame
 local blackscreens = game:GetService("Players").LocalPlayer.PlayerGui.fadetoblack.frame
 local miscui = game:GetService("ReplicatedStorage").misc.otherMenu
-local sponsor = game:GetService("Players").LocalPlayer.PlayerGui.mainHUD.SponsorFrame
-local spectate = game:GetService("Players").LocalPlayer.PlayerGui.endgamegui
+local sponsor = game:GetService("Players").LocalPlayer.PlayerGui.mainHUD.SponsorFramen
 
 --// stuff
 topbar.Visible = false
