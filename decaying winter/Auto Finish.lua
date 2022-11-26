@@ -23,3 +23,9 @@ game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(stuff.
 wait(1)
 e:GetService("ReplicatedStorage").Interactables.interaction:FireServer(stuff:FindFirstChild("Acquire Masks"), acquirething, _G.serverKey)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(400, -3, -16))
+game.StarterGui:SetCore("SendNotification", {
+    Title = '';
+    Text = "True Ending is ready.";
+    Icon = "rbxassetid://2541869220";
+    Duration = 4;
+})
