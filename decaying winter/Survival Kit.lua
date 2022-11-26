@@ -160,7 +160,7 @@ while true do
     end
 end
 loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Longer%20Effects.lua"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Remove%20UI.lua"))()
+wait()
 function Callback(answer)
     if answer == "Yes" then
         workspace.ServerStuff.playAudio:FireServer({ [1] = "songs", [2] = "holdout_bosses"}, "sledge", game.Workspace)
