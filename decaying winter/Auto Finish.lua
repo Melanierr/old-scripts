@@ -1,4 +1,6 @@
 local stuff = game.Workspace.InteractablesNoDel
+loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/key.lua"))()
+wait(1)
 game:GetService("ReplicatedStorage").Interactables.interaction:FireServer(stuff.Touch, "touchthing", _G.serverKey) -- knife
 wait(0.3)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(-74, 22, 166)) -- goto cultist small bunker wait
