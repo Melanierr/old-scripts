@@ -1,3 +1,4 @@
+
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
@@ -31,6 +32,7 @@ local tgas = {
 }
 
 --// Functions
+
 function getkey()
     spawn(function()
 for _, instance in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
@@ -53,8 +55,6 @@ for index, status in pairs(getupvalue(mainHandler.afflictstatus, 1)) do
 end
 end)
 end
-
-
 --// parry
 UserInputService.InputBegan:Connect(function(input, Typing)
     if Typing then
@@ -66,7 +66,6 @@ UserInputService.InputBegan:Connect(function(input, Typing)
 	        end
 	end
 end)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Longer%20Effects.lua"))()
 --// stun
 UserInputService.InputBegan:Connect(function(input, Typing)
     if Typing then
@@ -111,7 +110,7 @@ UserInputService.InputBegan:Connect(function(input, Typing)
         return
     end
 	if input.KeyCode == Enum.KeyCode.K then
-	    for o=1, 10 do
+	    for i=1, 10 do
 	        game.Workspace.ServerStuff.dealDamage:FireServer("Regeneration", nil, _G.serverKey, _G.playerKey)
 	        wait(0.1)
         end
@@ -126,7 +125,7 @@ UserInputService.InputBegan:Connect(function(input, Typing)
 	    for i=1, 10 do
             workspace.ServerStuff.dropAmmo:FireServer("rations", "MRE")
             workspace.ServerStuff.dropAmmo:FireServer("rations", "Bottle")
-            wait()
+            wait(0.1)
         end
     end
 end)
@@ -143,9 +142,9 @@ end)
 --// controlsGui
 gui.Enabled = false
 loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Announce.lua"))()
-wait(1)
 function Callback(answer)
     if answer == "Yes" then
+        wait(2)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Auto%20Finish.lua"))()
     elseif answer == "No" then
         print("Player rejected.")
@@ -162,13 +161,9 @@ game.StarterGui:SetCore("SendNotification", {
     Icon = "rbxassetid://11151804229";
     Callback = Bindable
 })
+loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Longer%20Effects.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Passive%20Heal.lua"))()
 while true do
     getkey()
     wait(1)
 end
-wait(5)
-for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= localplayer then 
-            player.Character.Parent = game.Workspace
-        end
-    end
