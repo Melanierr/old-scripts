@@ -139,6 +139,9 @@ UserInputService.InputBegan:Connect(function(input, Typing)
 	    end
 	end
 end)
+local alert = Instance.new("Sound",game:GetService("SoundService"))
+alert.SoundId = "rbxassetid://232127604"
+alert:Play()
 --// controlsGui
 gui.Enabled = false
 loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/decaying%20winter/Announce.lua"))()
