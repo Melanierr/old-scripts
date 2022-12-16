@@ -23,3 +23,6 @@ while true do
     end)
 wait()
 end
+local Sound = Instance.new("Sound",game:GetService("SoundService"))
+Sound.SoundId = "rbxassetid://232127604"
+Sound:Play()
