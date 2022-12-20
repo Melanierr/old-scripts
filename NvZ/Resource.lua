@@ -8,6 +8,7 @@ while true do
                     v.Character.Head.Size = Vector3.new(4, 4, 4)
                     v.Character.Head.Transparency = 0.4
                     v.Character.Head.CanCollide = false
+                    wait()
                 end
             end
         end
@@ -17,6 +18,7 @@ while true do
                     v.Character.Head.Size = Vector3.new(4, 4, 4)
                     v.Character.Head.Transparency = 0.4
                     v.Character.Head.CanCollide = false
+                    wait()
                 end
             end
         end
