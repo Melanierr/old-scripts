@@ -1,14 +1,22 @@
 function ESP()
     spawn(function()
         while true do
+            spawn(function()
                 for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
+                    if anomaly:IsA("Model") and not anomaly.Name == "demon" and not anomaly.Name == "hellwalker" then
                         local highlight = Instance.new("Highlight")
                         highlight.Parent = anomaly
+                    else
+                        return;
+                    end
                 end
+            end)
         wait()
         end
     end)
 end
+game:GetService("Players").LocalPlayer.PlayerGui.mainGui.blackOverlay:destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.mainGui["death_screen"]:destroy()
 local lobby = game:GetService("Workspace").lobby
 local InfiniteJumpEnabled = true
 local plr = game.Players.LocalPlayer.Character
@@ -17,21 +25,6 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("")
-    Section:NewButton("No Fog", "Removes fog.", function()
-        while true do 
-            game.Lighting.FogEnd = 1000000
-            game.Lighting.GlobalShadows = false
-            wait()
-        end
-    end)
-    Section:NewButton("Always Day", "Brightness.", function()
-        while true do
-            game.Lighting.Brightness = 3
-            game.Lighting.ClockTime = 12
-            
-            wait()
-        end
-    end)
     Section:NewButton("ESP", "Scary monster.", function()
         ESP()
         print("executed")
@@ -39,10 +32,12 @@ local Section = Tab:NewSection("")
     Section:NewButton("Hitbox Extender", "Big head", function()
         while true do
             for _, box in pairs(game.Workspace.mainGame["active_anomaly"]:GetDescendants()) do
-                if box:IsA("Part") and box.Name == "Head" then
-                    box.Size =  Vector3.new(5, 5, 5)
-                    box.Transparency = 0.6
-                    box.CanCollide = false
+                if box:IsA("Model") then
+                    box.Head.Size =  Vector3.new(5, 5, 5)
+                    box.Head.Transparency = 0.6
+                    box.Head.CanCollide = false
+                else 
+                    return;
                 end
             end
         wait()
@@ -59,6 +54,29 @@ local Section = Tab:NewSection("")
             end
         end)
     end)
+local Tab = Window:NewTab("Misc")
+local Section = Tab:NewSection("")
+    Section:NewButton("Fly Jump", "Geppo BLOX FRUITS?? REAL", function()
+        game:GetService("UserInputService").JumpRequest:connect(function()
+	        if InfiniteJumpEnabled then
+		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+	        end
+        end)
+    end)
+    Section:NewButton("No Fog", "Removes fog.", function()
+        while true do 
+            game.Lighting.FogEnd = 1000000
+            game.Lighting.GlobalShadows = false
+            wait()
+        end
+    end)
+    Section:NewButton("Always Day", "Brightness.", function()
+        while true do
+            game.Lighting.ClockTime = 12
+            
+            wait()
+        end
+    end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
         for _, object in pairs(lobby:GetChildren()) do
             if object.Name == "lights" or object.Name == "corrodedbit" then
@@ -72,6 +90,7 @@ local Section = Tab:NewSection("")
             end
         end
     end)
+wait(1)
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
 alert:Play()
