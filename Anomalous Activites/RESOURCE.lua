@@ -90,6 +90,9 @@ local Section = Tab:NewSection("")
             end
         end
     end)
+    Section:NewKeybind("Right Ctrl to close GUI", "", Enum.KeyCode.RightControl, function()
+	Library:ToggleUI()
+    end)
 wait(1)
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
