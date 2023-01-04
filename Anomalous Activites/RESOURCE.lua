@@ -73,11 +73,12 @@ local Section = Tab:NewSection("")
     Section:NewButton("Always Day", "Brightness.", function()
         while true do
             game.Lighting.ClockTime = 12
-            
             wait()
         end
     end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
+	game:GetService("Players").LocalPlayer.PlayerGui.mainGui.blackOverlay:destroy()
+	game:GetService("Players").LocalPlayer.PlayerGui.mainGui["death_screen"]:destroy()
         for _, object in pairs(lobby:GetChildren()) do
             if object.Name == "lights" or object.Name == "corrodedbit" then
                 object:destroy()
