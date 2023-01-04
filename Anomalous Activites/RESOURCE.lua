@@ -71,8 +71,8 @@ local Section = Tab:NewSection("")
         end
     end)
     Section:NewButton("Always Day", "Brightness.", function()
+	game.Lighting.ClockTime = 9
         while true do
-            game.Lighting.ClockTime = 12
 	    game.Lighting.Ambient = Color3.fromRGB(255,255,255)
 	    game.Lighting.Brightness = 2
 	    game.Lighting.FogColor = Color3.fromRGB(255,255,255)
