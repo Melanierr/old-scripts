@@ -1,22 +1,6 @@
-function ESP()
-    spawn(function()
-        while true do
-            spawn(function()
-                for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
-                    if anomaly:IsA("Model") and not anomaly.Name == "demon" and not anomaly.Name == "hellwalker" then
-                        local highlight = Instance.new("Highlight")
-                        highlight.Parent = anomaly
-                    else
-                        return;
-                    end
-                end
-            end)
-        wait()
-        end
-    end)
-end
-game:GetService("Players").LocalPlayer.PlayerGui.mainGui.blackOverlay:destroy()
-game:GetService("Players").LocalPlayer.PlayerGui.mainGui["death_screen"]:destroy()
+repeat 
+    wait() 
+until game:IsLoaded()
 local lobby = game:GetService("Workspace").lobby
 local InfiniteJumpEnabled = true
 local plr = game.Players.LocalPlayer.Character
@@ -26,8 +10,20 @@ local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("")
     Section:NewButton("ESP", "Scary monster.", function()
-        ESP()
-        print("executed")
+        while true do
+            spawn(function()
+                for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
+                    if anomaly:IsA("Model") then
+                        local highlight = Instance.new("Highlight")
+                        highlight.Parent = anomaly
+                        wait(2)
+                        highlight:destroy()
+                    else
+                    end
+                end
+            end)
+        wait()
+        end
     end)
     Section:NewButton("Hitbox Extender", "Big head", function()
         while true do
@@ -37,7 +33,7 @@ local Section = Tab:NewSection("")
                     box.Transparency = 0.6
                     box.CanCollide = false
                 else 
-                    return;
+                    
                 end
             end
         wait()
@@ -59,7 +55,7 @@ local Section = Tab:NewSection("")
     Section:NewButton("Fly Jump", "Geppo BLOX FRUITS?? REAL", function()
         game:GetService("UserInputService").JumpRequest:connect(function()
 	        if InfiniteJumpEnabled then
-		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+		        plr:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
 	        end
         end)
     end)
@@ -71,17 +67,14 @@ local Section = Tab:NewSection("")
         end
     end)
     Section:NewButton("Always Day", "Brightness.", function()
-	game.Lighting.ClockTime = 9
         while true do
 	    game.Lighting.Ambient = Color3.fromRGB(255,255,255)
-	    game.Lighting.Brightness = 2
 	    game.Lighting.FogColor = Color3.fromRGB(255,255,255)
             wait()
         end
     end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
-	game:GetService("Players").LocalPlayer.PlayerGui.mainGui.blackOverlay:destroy()
-	game:GetService("Players").LocalPlayer.PlayerGui.mainGui["death_screen"]:destroy()
+        game.Workspace.MedicalStuff:destroy()
         for _, object in pairs(lobby:GetChildren()) do
             if object.Name == "lights" or object.Name == "corrodedbit" then
                 object:destroy()
@@ -97,7 +90,19 @@ local Section = Tab:NewSection("")
     Section:NewKeybind("Right Ctrl to close GUI", "", Enum.KeyCode.RightControl, function()
 	Library:ToggleUI()
     end)
-wait(1)
+    -- Beta anti lag
+   --[[ while true do
+        if game.Workspace.CurrentMap then
+            for _, map in pairs(game.Workspace.CurrentMap:GetDescendants()) do
+                if map:IsA("Part") then
+                    map.Material = "Plastic"
+                    map.Color = Color3.new(163, 162, 165)
+                end
+            end
+        end
+    wait()
+    end
+    ]]
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
 alert:Play()
