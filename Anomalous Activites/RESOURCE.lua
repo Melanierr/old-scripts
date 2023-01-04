@@ -32,10 +32,10 @@ local Section = Tab:NewSection("")
     Section:NewButton("Hitbox Extender", "Big head", function()
         while true do
             for _, box in pairs(game.Workspace.mainGame["active_anomaly"]:GetDescendants()) do
-                if box:IsA("Model") then
-                    box.Head.Size =  Vector3.new(5, 5, 5)
-                    box.Head.Transparency = 0.6
-                    box.Head.CanCollide = false
+                if box:IsA("Part") and box.Name == "Head" then
+                    box.Size =  Vector3.new(5, 5, 5)
+                    box.Transparency = 0.6
+                    box.CanCollide = false
                 else 
                     return;
                 end
