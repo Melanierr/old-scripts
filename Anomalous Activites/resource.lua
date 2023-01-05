@@ -1,7 +1,5 @@
-repeat 
-    wait() 
-until game:IsLoaded()
-wait(1)
+repeat wait() until game:IsLoaded()
+if game:IsLoaded() and game.PlaceId == 8770868695 then
 local lobby = game:GetService("Workspace").lobby
 local tk = false
 local plr = game.Players.LocalPlayer.Character
@@ -18,7 +16,7 @@ local Section = Tab:NewSection("")
                     if anomaly:IsA("Model") then
                         local highlight = Instance.new("Highlight")
                         highlight.Parent = anomaly
-                        wait(2)
+                        wait(1.3)
                         highlight:destroy()
                     else
                     end
@@ -31,7 +29,7 @@ local Section = Tab:NewSection("")
         while true do
             for _, box in pairs(game.Workspace.mainGame["active_anomaly"]:GetDescendants()) do
                 if box:IsA("Part") and box.Name == "Head" then
-                    box.Size =  Vector3.new(5, 5, 5)
+                    box.Size =  Vector3.new(6, 6, 6)
                     box.Transparency = 0.6
                     box.CanCollide = false
                 else 
@@ -94,21 +92,33 @@ local Section = Tab:NewSection("")
     end)
     Section:NewButton("Always Day", "Brightness.", function()
         while true do
-	    game.Lighting.Ambient = Color3.fromRGB(255,255,255)
-	    game.Lighting.FogColor = Color3.fromRGB(255,255,255)
+    	    game.Lighting.Ambient = Color3.fromRGB(255,255,255)
+    	    game.Lighting.FogColor = Color3.fromRGB(255,255,255)
             wait()
         end
     end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
         game.Workspace.MedicalStuff:destroy()
+        --[[for _, eff in pairs(game:GetDescendants()) do
+            if eff:IsA("ParticleEmitter") then
+                eff:Destroy()
+            end
+        end
         for _, effects in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetChildren()) do
             if effects:IsA("ParticleEmitter") then
                 effects:destroy()
+            else
             end
         end
         for _,effect in pairs(game.ReplicatedStorage["weapon_effect"]:GetChildren()) do
             if effect:IsA("ParticleEmitter") then
                 effect:Destroy()
+            else
+            end
+        end]]
+        for _,v in pairs(workspace:GetDescendants()) do
+            if v.ClassName == "Part" or v.ClassName == "WedgePart" then
+                v.Material = "SmoothPlastic"
             end
         end
         for _, object in pairs(lobby:GetChildren()) do
@@ -123,7 +133,20 @@ local Section = Tab:NewSection("")
             end
         end
     end)
+    Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
+    end)
+    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
+        for i,v in next, workspace:GetDescendants() do
+            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                sethiddenproperty(v, "RenderFidelity", "Automatic")
+            end
+        end
+    end)
     Section:NewKeybind("Right Ctrl to close GUI", "", Enum.KeyCode.RightControl, function()
 	    Library:ToggleUI()
     end)
     alert:Play()
+else
+	return
+end
