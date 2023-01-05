@@ -64,6 +64,7 @@ local Section = Tab:NewSection("")
             wait()
             end
         else
+	    tk = false
             while tk == false do
                 for _, player in pairs(game.Players:GetPlayers()) do
                     if player.Character.Parent == game.Workspace.mainGame["active_firing_range"] and player ~= game.Players.LocalPlayer then
