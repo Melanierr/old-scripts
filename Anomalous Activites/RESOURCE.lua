@@ -1,10 +1,13 @@
 repeat 
     wait() 
 until game:IsLoaded()
+wait(1)
 local lobby = game:GetService("Workspace").lobby
+local tk = false
 local InfiniteJumpEnabled = true
 local plr = game.Players.LocalPlayer.Character
-local cf = Vector3.new(1, 1, 1)
+local alert = Instance.new("Sound",game:GetService("SoundService"))
+alert.SoundId = "rbxassetid://232127604"
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
@@ -39,6 +42,38 @@ local Section = Tab:NewSection("")
         wait()
         end
     end)
+    Section:NewButton("TeamKill", "OMG IMPOSTOR !!!", function()
+        while true do 
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player.Character.Parent == game.Workspace.mainGame["active_humans"] and player ~= game.Players.LocalPlayer then
+                    player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
+                end
+            end
+        wait()
+        end
+    end)
+    Section:NewToggle("TeamKill", "", function(state)
+        if state then
+            tk = true
+            while tk == true do 
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    if player.Character.Parent == game.Workspace.mainGame["active_humans"] and player ~= game.Players.LocalPlayer then
+                        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
+                    end
+                end
+            wait()
+            end
+        else
+            while tk == false do
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    if player.Character.Parent == game.Workspace.mainGame["active_firing_range"] and player ~= game.Players.LocalPlayer then
+                        player.Character.Parent = game.Workspace.mainGame["active_humans"]
+                    end
+                end
+            wait()
+            end
+        end
+    end)
     Section:NewButton("Instant Anchor ( F key )", "", function()
         game:GetService("UserInputService").InputBegan:Connect(function(Key)
             if Key.KeyCode == Enum.KeyCode.F then -- put your custom key here
@@ -52,10 +87,15 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
-    Section:NewButton("Fly Jump", "Geppo BLOX FRUITS?? REAL", function()
+    Section:NewButton("Fly Jump", "   T   ", function()
+        while true do
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 20
+            wait()
+        end
+        local InfiniteJumpEnabled = true
         game:GetService("UserInputService").JumpRequest:connect(function()
 	        if InfiniteJumpEnabled then
-		        plr:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
 	        end
         end)
     end)
@@ -75,6 +115,14 @@ local Section = Tab:NewSection("")
     end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
         game.Workspace.MedicalStuff:destroy()
+        for _, effects in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetChildren()) do
+            if effects:IsA("ParticleEmitter") or effects:IsA("Part") or effects:IsA("Part") then
+                effects:destroy()
+            end
+        end
+        for _,effect in pairs(game.ReplicatedStorage["weapon_effect"]:GetChildren()) do
+            effect:Destroy()
+        end
         for _, object in pairs(lobby:GetChildren()) do
             if object.Name == "lights" or object.Name == "corrodedbit" then
                 object:destroy()
@@ -88,21 +136,6 @@ local Section = Tab:NewSection("")
         end
     end)
     Section:NewKeybind("Right Ctrl to close GUI", "", Enum.KeyCode.RightControl, function()
-	Library:ToggleUI()
+	    Library:ToggleUI()
     end)
-    -- Beta anti lag
-   --[[ while true do
-        if game.Workspace.CurrentMap then
-            for _, map in pairs(game.Workspace.CurrentMap:GetDescendants()) do
-                if map:IsA("Part") then
-                    map.Material = "Plastic"
-                    map.Color = Color3.new(163, 162, 165)
-                end
-            end
-        end
-    wait()
-    end
-    ]]
-local alert = Instance.new("Sound",game:GetService("SoundService"))
-alert.SoundId = "rbxassetid://232127604"
-alert:Play()
+    alert:Play()
