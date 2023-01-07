@@ -117,6 +117,9 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
+Section:NewButton("TP to lobby", "Useful for trolling", function()
+        plr.HumanoidRootPart.CFrame = CFrame.new(-9, -16, 11)
+    end)
 Section:NewButton("No Fog", "Removes fog.", function()
         while true do 
             game.Lighting.FogEnd = 1000000
