@@ -2,6 +2,7 @@ repeat wait() until game:IsLoaded()
 if game:IsLoaded() and game.PlaceId == 8770868695 then
 local lobby = game:GetService("Workspace").lobby
 local tk = false
+local noclip = false
 local plr = game.Players.LocalPlayer.Character
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
@@ -14,22 +15,6 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("")
-    Section:NewButton("ESP", "Scary monster.", function()
-        while true do
-            spawn(function()
-                for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
-                    if anomaly:IsA("Model") then
-                        local highlight = Instance.new("Highlight")
-                        highlight.Parent = anomaly
-                        wait(1)
-                        highlight:destroy()
-                    else
-                    end
-                end
-            end)
-        wait()
-        end
-    end)
     Section:NewButton("Hitbox Extender", "Big head", function()
         while true do
             for _, box in pairs(game.Workspace.mainGame["active_anomaly"]:GetDescendants()) do
@@ -46,24 +31,14 @@ local Section = Tab:NewSection("")
     Section:NewToggle("TeamKill", " S U S ", function(state)
         if state then
             tk = true
-            while tk == true do
-                plr.Parent = game.Workspace.mainGame["active_humans"]
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    if player.Character.Parent == game.Workspace.mainGame["active_humans"] and player ~= game.Players.LocalPlayer then
-                        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
-                    end
-                end
+            while tk == true do 
+                plr.Parent = game.Workspace.mainGame["active_squads"]
             wait()
             end
         else
             tk = false
             while tk == false do
                 plr.Parent = game.Workspace.mainGame["active_humans"]
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    if player.Character.Parent == game.Workspace.mainGame["active_anomaly"] and player ~= game.Players.LocalPlayer then
-                        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
-                    end
-                end
             wait()
             end
         end
@@ -81,8 +56,21 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("Player")
 local Section = Tab:NewSection("")
-    Section:NewButton("TP to lobby", "Useful for trolling", function()
-        plr.HumanoidRootPart.CFrame = Vector3.new(-9, -16, 11)
+    Section:NewButton("ESP", "Scary monster.", function()
+        while true do
+            spawn(function()
+                for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
+                    if anomaly:IsA("Model") then
+                        local highlight = Instance.new("Highlight")
+                        highlight.Parent = anomaly
+                        wait(1)
+                        highlight:destroy()
+                    else
+                    end
+                end
+            end)
+        wait()
+        end
     end)
     Section:NewButton("Fly Jump", "   T   ", function()
         local InfiniteJumpEnabled = true
@@ -91,6 +79,19 @@ local Section = Tab:NewSection("")
 		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
         	end
         end)
+    end)
+    Section:NewToggle("Noclip", "NOT IMPLENTED", function(state)
+        if state then
+            noclip = true
+                if noclip == true then  
+                    game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+                end
+        else
+            noclip  = false
+            if noclip == false  then
+                game.Players.LocalPlayer.Character.Humanoid:ChangeState(1)
+            end
+        end
     end)
     Section:NewButton("Show hidden guns", "", function()
         if dp then
@@ -114,26 +115,16 @@ local Section = Tab:NewSection("")
             sb.special_attributes = {not_shown = false}
         end
     end)
-local Tab = Window:NewTab("Misc")
+local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
-    Section:NewButton("No Fog", "Removes fog.", function()
+Section:NewButton("No Fog", "Removes fog.", function()
         while true do 
             game.Lighting.FogEnd = 1000000
             game.Lighting.GlobalShadows = false
             wait()
         end
     end)
-    Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
-    end)
-    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
-        for i,v in next, workspace:GetDescendants() do
-            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
-                sethiddenproperty(v, "RenderFidelity", "Automatic")
-            end
-        end
-    end)
-    Section:NewButton("Always Day", "Brightness.", function()
+Section:NewButton("Always Day", "Brightness.", function()
         game.Lighting.Ambient = Color3.fromRGB(255,255,255)
     	game.Lighting.FogColor = Color3.fromRGB(255,255,255)
     end)
@@ -163,6 +154,18 @@ local Section = Tab:NewSection("")
             if material.Name == "Block" then
                 material.Material = "Plastic"
                 material.Color = Color3.new(163, 162, 165)
+            end
+        end
+    end)
+local Tab = Window:NewTab("Misc")
+local Section = Tab:NewSection("")
+    Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
+    end)
+    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
+        for i,v in next, workspace:GetDescendants() do
+            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                sethiddenproperty(v, "RenderFidelity", "Automatic")
             end
         end
     end)
