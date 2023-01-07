@@ -5,6 +5,11 @@ local tk = false
 local plr = game.Players.LocalPlayer.Character
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
+local ab = require(game:GetService("ReplicatedStorage")["weapon_modules"].akimboblack)
+local dp = require(game:GetService("ReplicatedStorage")["weapon_modules"].dualpistol)
+local sb = require(game:GetService("ReplicatedStorage")["weapon_modules"].sniperblack)
+local bg = require(game:GetService("ReplicatedStorage")["weapon_modules"].blackgun)
+local sp = require(game:GetService("ReplicatedStorage")["weapon_modules"].suppistol)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
@@ -16,7 +21,7 @@ local Section = Tab:NewSection("")
                     if anomaly:IsA("Model") then
                         local highlight = Instance.new("Highlight")
                         highlight.Parent = anomaly
-                        wait(1.3)
+                        wait(1)
                         highlight:destroy()
                     else
                     end
@@ -33,16 +38,16 @@ local Section = Tab:NewSection("")
                     box.Transparency = 0.6
                     box.CanCollide = false
                 else 
-                    
                 end
             end
         wait()
         end
     end)
-    Section:NewToggle("TeamKill", "", function(state)
+    Section:NewToggle("TeamKill", " S U S ", function(state)
         if state then
             tk = true
-            while tk == true do 
+            while tk == true do
+                plr.Parent = game.Workspace.mainGame["active_humans"]
                 for _, player in pairs(game.Players:GetPlayers()) do
                     if player.Character.Parent == game.Workspace.mainGame["active_humans"] and player ~= game.Players.LocalPlayer then
                         player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
@@ -53,9 +58,10 @@ local Section = Tab:NewSection("")
         else
             tk = false
             while tk == false do
+                plr.Parent = game.Workspace.mainGame["active_humans"]
                 for _, player in pairs(game.Players:GetPlayers()) do
-                    if player.Character.Parent == game.Workspace.mainGame["active_firing_range"] and player ~= game.Players.LocalPlayer then
-                        player.Character.Parent = game.Workspace.mainGame["active_humans"]
+                    if player.Character.Parent == game.Workspace.mainGame["active_anomaly"] and player ~= game.Players.LocalPlayer then
+                        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
                     end
                 end
             wait()
@@ -73,8 +79,11 @@ local Section = Tab:NewSection("")
             end
         end)
     end)
-local Tab = Window:NewTab("Misc")
+local Tab = Window:NewTab("Player")
 local Section = Tab:NewSection("")
+    Section:NewButton("TP to lobby", "Useful for trolling", function()
+        plr.HumanoidRootPart.CFrame = Vector3.new(-9, -16, 11)
+    end)
     Section:NewButton("Fly Jump", "   T   ", function()
         local InfiniteJumpEnabled = true
         game:GetService("UserInputService").JumpRequest:connect(function()
@@ -83,6 +92,30 @@ local Section = Tab:NewSection("")
         	end
         end)
     end)
+    Section:NewButton("Show hidden guns", "", function()
+        if dp then
+            dp.special_attributes = {
+        	not_shown = false, 
+        	akimbo = true, 
+        	burst_rpm_mod = 0.1, 
+        	spare_modifier = 10
+        };
+        end
+        if ab then
+            ab.special_attributes = { not_shown = false}
+        end
+        if bg then
+            bg.special_attributes = {not_shown = false}
+        end
+        if sp then
+            sp.special_attributes = {not_shown = false}
+        end
+        if sb then
+            sb.special_attributes = {not_shown = false}
+        end
+    end)
+local Tab = Window:NewTab("Misc")
+local Section = Tab:NewSection("")
     Section:NewButton("No Fog", "Removes fog.", function()
         while true do 
             game.Lighting.FogEnd = 1000000
@@ -90,32 +123,32 @@ local Section = Tab:NewSection("")
             wait()
         end
     end)
-    Section:NewButton("Always Day", "Brightness.", function()
-        while true do
-    	    game.Lighting.Ambient = Color3.fromRGB(255,255,255)
-    	    game.Lighting.FogColor = Color3.fromRGB(255,255,255)
-            wait()
+    Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
+    end)
+    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
+        for i,v in next, workspace:GetDescendants() do
+            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                sethiddenproperty(v, "RenderFidelity", "Automatic")
+            end
         end
     end)
+    Section:NewButton("Always Day", "Brightness.", function()
+        game.Lighting.Ambient = Color3.fromRGB(255,255,255)
+    	game.Lighting.FogColor = Color3.fromRGB(255,255,255)
+    end)
     Section:NewButton("Lag fix", "removes unnecesscary objects", function()
+        for _,particle in pairs(game:GetDescendants()) do
+            if particle:IsA("ParticleEmitter") then
+                particle.Enabled = false
+            end
+        end
+        for _, eff in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetDescendants()) do
+            if eff.Name ~= "laser" and eff.Name ~= "ping" and eff.Name ~= "scope_part" and eff:IsA("Part") or eff:IsA("MeshPart") then
+                eff.Transparency = 1 
+            end
+        end
         game.Workspace.MedicalStuff:destroy()
-        --[[for _, eff in pairs(game:GetDescendants()) do
-            if eff:IsA("ParticleEmitter") then
-                eff:Destroy()
-            end
-        end
-        for _, effects in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetChildren()) do
-            if effects:IsA("ParticleEmitter") then
-                effects:destroy()
-            else
-            end
-        end
-        for _,effect in pairs(game.ReplicatedStorage["weapon_effect"]:GetChildren()) do
-            if effect:IsA("ParticleEmitter") then
-                effect:Destroy()
-            else
-            end
-        end]]
         for _,v in pairs(workspace:GetDescendants()) do
             if v.ClassName == "Part" or v.ClassName == "WedgePart" then
                 v.Material = "SmoothPlastic"
@@ -130,16 +163,6 @@ local Section = Tab:NewSection("")
             if material.Name == "Block" then
                 material.Material = "Plastic"
                 material.Color = Color3.new(163, 162, 165)
-            end
-        end
-    end)
-    Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
-    end)
-    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
-        for i,v in next, workspace:GetDescendants() do
-            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
-                sethiddenproperty(v, "RenderFidelity", "Automatic")
             end
         end
     end)
