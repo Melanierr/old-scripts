@@ -32,13 +32,21 @@ local Section = Tab:NewSection("")
         if state then
             tk = true
             while tk == true do 
-                plr.Parent = game.Workspace.mainGame["active_squads"]
+                for _, player in pairs(game.Players:GetPlayers()) do
+			if player ~= game.Players.LocalPlayer and player.Parent == game.Workspace.mainGame["active_humans"] then
+				player.Parent = game.Workspace.mainGame["active_firing_range"]
+			end
+		end
             wait()
             end
         else
             tk = false
             while tk == false do
-                plr.Parent = game.Workspace.mainGame["active_humans"]
+                for _, player in pairs(game.Players:GetPlayers()) do
+			if player ~= game.Players.LocalPlayer and player.Parent == game.Workspace.mainGame["active_firing_range"] then
+				player.Parent = game.Workspace.mainGame["active_humans"]
+			end
+		end
             wait()
             end
         end
