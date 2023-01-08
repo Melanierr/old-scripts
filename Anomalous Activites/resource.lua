@@ -56,6 +56,21 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("Player")
 local Section = Tab:NewSection("")
+    Section:NewButton("Terror Shredder", "Brightness.", function()
+        local v11 = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
+        if v11 then
+            v11.desc = "Terror Shredder."
+            v11.falloff = 125
+            v11.falloff_damage = 25
+            local v31 = {}
+            v31.full_acc_aimed = true
+            v31.trigger_delay = 0.4
+            v31.rpm_increase = 0.5
+            v31.rpm_max_increase = 15
+            v11.special_attributes = v31
+        end
+        workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.lmg, ["gui"] = workspace.merc_customisation.gui.primary})
+    end)
     Section:NewButton("ESP", "Scary monster.", function()
         while true do
             spawn(function()
@@ -79,19 +94,6 @@ local Section = Tab:NewSection("")
 		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
         	end
         end)
-    end)
-    Section:NewToggle("Noclip", "NOT IMPLENTED", function(state)
-        if state then
-            noclip = true
-                if noclip == true then  
-                    game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
-                end
-        else
-            noclip  = false
-            if noclip == false  then
-                game.Players.LocalPlayer.Character.Humanoid:ChangeState(1)
-            end
-        end
     end)
     Section:NewButton("Show hidden guns", "", function()
         if dp then
@@ -117,49 +119,49 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
-Section:NewButton("TP to lobby", "Useful for trolling", function()
-        plr.HumanoidRootPart.CFrame = CFrame.new(-9, -16, 11)
-    end)
-Section:NewButton("No Fog", "Removes fog.", function()
-        while true do 
-            game.Lighting.FogEnd = 1000000
-            game.Lighting.GlobalShadows = false
-            wait()
-        end
-    end)
-Section:NewButton("Always Day", "Brightness.", function()
-        game.Lighting.Ambient = Color3.fromRGB(255,255,255)
-    	game.Lighting.FogColor = Color3.fromRGB(255,255,255)
-    end)
-    Section:NewButton("Lag fix", "removes unnecesscary objects", function()
-        for _,particle in pairs(game:GetDescendants()) do
-            if particle:IsA("ParticleEmitter") then
-                particle.Enabled = false
+    Section:NewButton("TP to lobby", "Useful for trolling", function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-9, -16, 11)
+        end)
+    Section:NewButton("No Fog", "Removes fog.", function()
+            while true do 
+                game.Lighting.FogEnd = 1000000
+                game.Lighting.GlobalShadows = false
+                wait()
             end
-        end
-        for _, eff in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetDescendants()) do
-            if eff.Name ~= "laser" and eff.Name ~= "ping" and eff.Name ~= "scope_part" and eff:IsA("Part") or eff:IsA("MeshPart") then
-                eff.Transparency = 1 
+        end)
+    Section:NewButton("Always Day", "Brightness.", function()
+       	game.Lighting.Ambient = Color3.fromRGB(255,255,255)
+       	game.Lighting.FogColor = Color3.fromRGB(255,255,255)
+        end)
+        Section:NewButton("Lag fix", "removes unnecesscary objects", function()
+            for _,particle in pairs(game:GetDescendants()) do
+                if particle:IsA("ParticleEmitter") then
+                    particle.Enabled = false
+                end
             end
-        end
-        game.Workspace.MedicalStuff:destroy()
-        for _,v in pairs(workspace:GetDescendants()) do
-            if v.ClassName == "Part" or v.ClassName == "WedgePart" then
-                v.Material = "SmoothPlastic"
+            for _, eff in pairs(game:GetService("ReplicatedStorage")["misc_effects"]:GetDescendants()) do
+                if eff.Name ~= "laser" and eff.Name ~= "ping" and eff.Name ~= "scope_part" and eff:IsA("Part") or eff:IsA("MeshPart") then
+                    eff.Transparency = 1 
+                end
             end
-        end
-        for _, object in pairs(lobby:GetChildren()) do
-            if object.Name == "lights" or object.Name == "corrodedbit" then
-                object:destroy()
+            game.Workspace.MedicalStuff:destroy()
+            for _,v in pairs(workspace:GetDescendants()) do
+                if v.ClassName == "Part" or v.ClassName == "WedgePart" then
+                    v.Material = "SmoothPlastic"
+                end
             end
-        end
-        for _, material in pairs(lobby:GetChildren()) do
-            if material.Name == "Block" then
-                material.Material = "Plastic"
-                material.Color = Color3.new(163, 162, 165)
+            for _, object in pairs(lobby:GetChildren()) do
+                if object.Name == "lights" or object.Name == "corrodedbit" then
+                    object:destroy()
+                end
             end
-        end
-    end)
+            for _, material in pairs(lobby:GetChildren()) do
+                if material.Name == "Block" then
+                    material.Material = "Plastic"
+                    material.Color = Color3.new(163, 162, 165)
+                end
+            end
+        end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
     Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
