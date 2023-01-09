@@ -67,21 +67,6 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("Player")
 local Section = Tab:NewSection("")
-    Section:NewButton("Terror Shredder", "Idea from Fumoslayer#3006", function()
-        local v11 = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
-        if v11 then
-            v11.desc = "Terror Shredder."
-            v11.falloff = 125
-            v11.falloff_damage = 25
-            local v31 = {}
-            v31.full_acc_aimed = true
-            v31.trigger_delay = 0.4
-            v31.rpm_increase = 0.5
-            v31.rpm_max_increase = 15
-            v11.special_attributes = v31
-        end
-        workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.lmg, ["gui"] = workspace.merc_customisation.gui.primary})
-    end)
     Section:NewButton("ESP", "Scary monster.", function()
         while true do
             spawn(function()
@@ -175,9 +160,23 @@ local Section = Tab:NewSection("")
         end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
+        Section:NewButton("Terror Shredder", "Idea from Fumoslayer#3006", function()
+        local v11 = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
+        if v11 then
+            v11.desc = "Terror Shredder."
+            v11.falloff = 125
+            v11.falloff_damage = 25
+            local v31 = {}
+            v31.full_acc_aimed = true
+            v31.trigger_delay = 0.4
+            v31.rpm_increase = 0.5
+            v31.rpm_max_increase = 15
+            v11.special_attributes = v31
+        end
+    end)
     Section:NewButton("Equip Spare Magazine in-case", "ButtonInfo", function()
-    workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
-end)
+    	workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
+    end)
     Section:NewButton("Mod guns", "", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/Gun%20Mod.lua"))()
     end)
