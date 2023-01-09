@@ -15,7 +15,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib("Anomalous Activities", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("")
-    Section:NewButton("NVG ( Q key )", "execute once", function()
+    Section:NewButton("NVG ( C key )", "execute once", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/NVG.lua"))()
     end)
     Section:NewButton("Hitbox Extender", "Big head", function()
