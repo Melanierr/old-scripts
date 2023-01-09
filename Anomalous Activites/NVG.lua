@@ -11,7 +11,7 @@ cce.TintColor = Color3.new(0.376471, 0.772549, 0.317647)
 sound.SoundId = "rbxassetid://6361023770"
 
 uis.InputBegan:Connect(function(input, processed)
-if input.KeyCode == Enum.KeyCode.Q then
+if input.KeyCode == Enum.KeyCode.C then
 if dounce == false then
 dounce = true
 if isenabled == false then
