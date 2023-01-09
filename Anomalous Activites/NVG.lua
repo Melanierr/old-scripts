@@ -29,7 +29,7 @@ isenabled = false
 
 end
 else
-wait(3)
+wait(1.8)
 dounce = false
 end
 end
