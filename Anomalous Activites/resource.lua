@@ -67,7 +67,7 @@ local Section = Tab:NewSection("")
     end)
 local Tab = Window:NewTab("Player")
 local Section = Tab:NewSection("")
-    Section:NewButton("Terror Shredder", "Brightness.", function()
+    Section:NewButton("Terror Shredder", "Idea from Fumoslayer#3006", function()
         local v11 = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
         if v11 then
             v11.desc = "Terror Shredder."
