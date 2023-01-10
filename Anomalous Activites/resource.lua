@@ -37,8 +37,8 @@ local Section = Tab:NewSection("")
             tk = true
             while tk == true do 
                 for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Parent == game.Workspace.mainGame["active_humans"] then
-				player.Parent = game.Workspace.mainGame["active_firing_range"]
+			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_humans"] then
+				player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
 			end
 		end
             wait()
@@ -47,8 +47,8 @@ local Section = Tab:NewSection("")
             tk = false
             while tk == false do
                 for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Parent == game.Workspace.mainGame["active_firing_range"] then
-				player.Parent = game.Workspace.mainGame["active_humans"]
+			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_firing_range"] then
+				player.Character.Parent = game.Workspace.mainGame["active_humans"]
 			end
 		end
             wait()
