@@ -147,9 +147,9 @@ local Section = Tab:NewSection("")
     Section:NewButton("Equip Spare Magazine in-case", "ButtonInfo", function()
     	workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
     end)
-    --[[Section:NewButton("Mod guns (only for variants)", "", function()
+    Section:NewButton("Mod guns (CURRENTLY BBROKEN)", "", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/Gun%20Mod.lua"))()
-    end)]]
+    end)
 local Section = Tab:NewSection("")
    --[[ Section:NewButton("Show hidden guns", "", function()
         for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
