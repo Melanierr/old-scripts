@@ -1,16 +1,16 @@
-local mod = {}
-mod.full_acc_aimed = true
-mod.rpm_increase = 0.05
-mod.rpm_increase_max = 10
-mod.trigger_delay = 0.2
+local v31 = {}
+v31.full_acc_aimed = true
+v31.rpm_increase = 0.05
+v31.rpm_increase_max = 10
+v31.trigger_delay = 0.01
 local supp = require(game.ReplicatedStorage['weapon_modules'].suppistol)
 local lmg = require(game.ReplicatedStorage['weapon_variants'].lmg_aa)
 if lmg then
-    lmg.special_attributes = mod
+    lmg.special_attributes = v31
     lmg.desc = "Slay until there's none left."
 end
 if supp then
-    supp.speical_attributes = mod
+    supp.speical_attributes = v31
 end
 
 
