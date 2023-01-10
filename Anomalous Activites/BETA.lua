@@ -19,7 +19,7 @@ workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
 local args = {
     [1] = "merc",
     [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.dualpistol,
+        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.pistol_diab,
         ["gui"] = workspace.merc_customisation.gui.pistol
     }
 }
