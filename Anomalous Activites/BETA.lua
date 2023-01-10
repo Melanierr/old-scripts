@@ -3,8 +3,8 @@ mod.full_acc_aimed = true
 mod.rpm_increase = 0.05
 mod.rpm_increase_max = 10
 mod.trigger_delay = 0.2
-local supp = require(game.ReplicatedStorage['weapon_variants'].suppistol)
-local lmg = require(game.ReplicatedStorage['weapon_modules'].lmg_aa)
+local supp = require(game.ReplicatedStorage['weapon_modules'].suppistol)
+local lmg = require(game.ReplicatedStorage['weapon_variants'].lmg_aa)
 if lmg then
     lmg.special_attributes = mod
     lmg.desc = "Slay until there's none left."
