@@ -4,6 +4,7 @@ local lobby = game:GetService("Workspace").lobby
 local tk = false
 local noclip = false
 local plr = game.Players.LocalPlayer.Character
+game.Players.LocalPlayer.PlayerGui.mainGui.blackOverlay.Visible = false
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
 local ab = require(game:GetService("ReplicatedStorage")["weapon_modules"].akimboblack)
@@ -54,7 +55,7 @@ local Section = Tab:NewSection("")
             end
         end
     end)
-    Section:NewButton("Instant Anchor ( F key )", "", function()
+    Section:NewButton("Instant interaction ( F key )", "", function()
         game:GetService("UserInputService").InputBegan:Connect(function(Key)
             if Key.KeyCode == Enum.KeyCode.F then -- put your custom key here
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.A })
@@ -62,6 +63,8 @@ local Section = Tab:NewSection("")
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.C })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.D })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.E })
+                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Ammo})
+                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Reinforcements})
             end
         end)
     end)
@@ -90,15 +93,6 @@ local Section = Tab:NewSection("")
 		        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
         	end
         end)
-    end)
-    Section:NewButton("Show hidden guns", "", function()
-        for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
-		local cs = require(cyka)
-		local v31 = {}
-			v31.not_shown = false
-			v31.disallowed = false
-		cs.special_attributes = v31
-	end
     end)
 local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
@@ -147,25 +141,24 @@ local Section = Tab:NewSection("")
         end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
-        Section:NewButton("Terror Shredder", "Idea from Fumoslayer#3006", function()
-        local v11 = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
-        if v11 then
-            v11.desc = "Terror Shredder."
-            v11.falloff = 125
-            v11.falloff_damage = 25
-            local v31 = {}
-            v31.full_acc_aimed = true
-            v31.trigger_delay = 0.4
-            v31.rpm_increase = 0.5
-            v31.rpm_max_increase = 15
-            v11.special_attributes = v31
-        end
+    Section:NewButton("Hunter Kit", "", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/BETA.lua"))()
     end)
     Section:NewButton("Equip Spare Magazine in-case", "ButtonInfo", function()
     	workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
     end)
     Section:NewButton("Mod guns", "", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/Gun%20Mod.lua"))()
+    end)
+local Section = Tab:NewSection("")
+    Section:NewButton("Show hidden guns", "", function()
+        for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
+		local cs = require(cyka)
+		local v31 = {}
+			v31.not_shown = false
+			v31.disallowed = false
+		cs.special_attributes = v31
+	end
     end)
     Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
