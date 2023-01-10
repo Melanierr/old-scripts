@@ -58,13 +58,13 @@ local Section = Tab:NewSection("")
     Section:NewButton("Instant interaction ( F key )", "", function()
         game:GetService("UserInputService").InputBegan:Connect(function(Key)
             if Key.KeyCode == Enum.KeyCode.F then -- put your custom key here
+		workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Ammo})
+                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Reinforcements})
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.A })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.B })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.C })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.D })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.E })
-                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Ammo})
-                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with'] = workspace.CurrentMap.Interactables.Reinforcements})
             end
         end)
     end)
@@ -147,11 +147,11 @@ local Section = Tab:NewSection("")
     Section:NewButton("Equip Spare Magazine in-case", "ButtonInfo", function()
     	workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
     end)
-    Section:NewButton("Mod guns", "", function()
+    Section:NewButton("Mod guns (only for variants)", "", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/Gun%20Mod.lua"))()
     end)
 local Section = Tab:NewSection("")
-    Section:NewButton("Show hidden guns", "", function()
+   --[[ Section:NewButton("Show hidden guns", "", function()
         for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
 		local cs = require(cyka)
 		local v31 = {}
@@ -159,7 +159,7 @@ local Section = Tab:NewSection("")
 			v31.disallowed = false
 		cs.special_attributes = v31
 	end
-    end)
+    end)]]
     Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
     end)
