@@ -92,26 +92,13 @@ local Section = Tab:NewSection("")
         end)
     end)
     Section:NewButton("Show hidden guns", "", function()
-        if dp then
-            dp.special_attributes = {
-        	not_shown = false, 
-        	akimbo = true, 
-        	burst_rpm_mod = 0.1, 
-        	spare_modifier = 10
-        };
-        end
-        if ab then
-            ab.special_attributes = { not_shown = false}
-        end
-        if bg then
-            bg.special_attributes = {not_shown = false}
-        end
-        if sp then
-            sp.special_attributes = {not_shown = false}
-        end
-        if sb then
-            sb.special_attributes = {not_shown = false}
-        end
+        for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
+		local cs = require(cyka)
+		local v31 = {}
+			v31.not_shown = false
+			v31.disallowed = false
+		cs.special_attributes = v31
+	end
     end)
 local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
