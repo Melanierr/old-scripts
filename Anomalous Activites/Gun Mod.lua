@@ -1,4 +1,4 @@
---[[for _, modules in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
+for _, modules in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
     if modules.Name ~= "syringe" and modules.Name ~= 'stim' and modules.Name ~= 'flash' and modules.Name ~= 'stamshot' and modules.Name ~= 'mine'  and modules.Name ~= "frag" then  
         local ms = require(modules)
         local v31 = {}
