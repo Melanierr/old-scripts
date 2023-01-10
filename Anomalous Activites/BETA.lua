@@ -3,7 +3,7 @@ mod.full_acc_aimed = true
 mod.rpm_increase = 0.05
 mod.rpm_increase_max = 10
 mod.trigger_delay = 0.2
-local supp = require(game.ReplicatedStorage['weapon_modules'].suppistol)
+local supp = require(game.ReplicatedStorage['weapon_variants'].suppistol)
 local lmg = require(game.ReplicatedStorage['weapon_modules'].lmg_aa)
 if lmg then
     lmg.special_attributes = mod
@@ -42,7 +42,7 @@ workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
 local args = {
     [1] = "merc",
     [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_variants.suppistol,
+        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.suppistol,
         ["gui"] = workspace.merc_customisation.gui.pistol
     }
 }
