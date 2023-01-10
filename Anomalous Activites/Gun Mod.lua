@@ -13,7 +13,7 @@
         ms.special_attributes = v31
     end
 end
-wait(1)]]
+wait(1)
 for _, modules in pairs(game.ReplicatedStorage['weapon_variants']:GetChildren()) do
         local ms = require(modules)
         local v31 = {}
