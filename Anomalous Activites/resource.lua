@@ -13,7 +13,7 @@ local sb = require(game:GetService("ReplicatedStorage")["weapon_modules"].sniper
 local bg = require(game:GetService("ReplicatedStorage")["weapon_modules"].blackgun)
 local sp = require(game:GetService("ReplicatedStorage")["weapon_modules"].suppistol)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Anomalous Activities", "Synapse")
+local Window = Library.CreateLib("Anomalous Activities [MERCs only]", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("")
     Section:NewButton("NVG ( C key )", "execute once", function()
