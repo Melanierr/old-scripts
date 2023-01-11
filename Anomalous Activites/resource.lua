@@ -174,6 +174,12 @@ local Section = Tab:NewSection("")
 	    Library:ToggleUI()
     end)
     alert:Play()
+local Tab = Window:NewTab("?")
+local Section = Tab:NewSection("Credits")
+	Section:NewLabel("Made by : Musc#8707")
+	Section:NewLabel("Modding guns taken from Fumoslayer#3006")
+	Section:NewLabel("Discord")
+	Section:NewLabel("discord.gg/e6Adw82CJU")
 else
 	return
 end
