@@ -219,11 +219,11 @@ local Section = Tab:NewSection("")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
     end)
     Section:NewToggle("??", " ", function(state)
-        anti = true
         if state then
+	anti = true
             while anti == true do
                 spawn(function()
-                    for _, lag in pairs(game.Workspace.CurrentMap:GetDescendants()) do
+                    for _, lag in pairs(game.Workspace:GetDescendants()) do
                         if lag:IsA("Part")then
                             lag.Material = "Plastic"
                         end
