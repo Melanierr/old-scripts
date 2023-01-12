@@ -93,7 +93,7 @@ local Section = Tab:NewSection("")
                     if anomaly:IsA("Model") then
                         local highlight = Instance.new("Highlight")
                         highlight.Parent = anomaly
-                        wait(0.1)
+                        wait()
                         highlight:destroy()
                     else
                     end
