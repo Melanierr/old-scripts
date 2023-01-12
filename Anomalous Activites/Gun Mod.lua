@@ -3,13 +3,10 @@ for _, modules in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) 
         local ms = require(modules)
         local v31 = {}
         v31.full_acc_aimed = true
-        v31.trigger_delay = 0.1
-        v31.rpm_increase = 0.1
-        v31.rpm_max_increase = 10
-        v31.not_shown = false
-        v31.disallowed = false
+        v31.trigger_delay = 0
+        v31.rpm_increase = 1
+        v31.rpm_max_increase = 30
         ms.semi_automatic = false
-        ms.single_load = false
         ms.special_attributes = v31
     end
 end
@@ -21,9 +18,5 @@ for _, modules in pairs(game.ReplicatedStorage['weapon_variants']:GetChildren())
         v31.trigger_delay = 0.1
         v31.rpm_increase = 0.1
         v31.rpm_max_increase = 10
-        v31.not_shown = false
-        v31.disallowed = false
-        ms.semi_automatic = false
-        ms.single_load = false
         ms.special_attributes = v31
 end
