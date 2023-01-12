@@ -1,7 +1,9 @@
 repeat wait() until game:IsLoaded()
 if game:IsLoaded() and game.PlaceId == 8770868695 then
 local lobby = game:GetService("Workspace").lobby
+local anti = false
 local tk = false
+local newtk = false
 local cam = false
 local noclip = false
 local squad = game:GetService("ReplicatedStorage")["sound_library"].music.squad
@@ -11,11 +13,6 @@ local plr = game.Players.LocalPlayer.Character
 game.Players.LocalPlayer.PlayerGui.mainGui.blackOverlay.Visible = false
 local alert = Instance.new("Sound",game:GetService("SoundService"))
 alert.SoundId = "rbxassetid://232127604"
-local ab = require(game:GetService("ReplicatedStorage")["weapon_modules"].akimboblack)
-local dp = require(game:GetService("ReplicatedStorage")["weapon_modules"].dualpistol)
-local sb = require(game:GetService("ReplicatedStorage")["weapon_modules"].sniperblack)
-local bg = require(game:GetService("ReplicatedStorage")["weapon_modules"].blackgun)
-local sp = require(game:GetService("ReplicatedStorage")["weapon_modules"].suppistol)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anomalous Activities [MERCs only]", "Synapse")
 local Tab = Window:NewTab("Main")
@@ -25,24 +22,26 @@ local Section = Tab:NewSection("")
     end)
     Section:NewButton("Hitbox Extender", "Big head", function()
         while true do
+            spawn(function()
             for _, box in pairs(game.Workspace.mainGame["active_anomaly"]:GetDescendants()) do
                 if box:IsA("Part") and box.Name == "Head" then
-                    box.Size =  Vector3.new(6, 6, 6)
+                    box.Size =  Vector3.new(5, 5, 5)
                     box.Transparency = 0.6
                     box.CanCollide = false
                 else 
                 end
             end
+            end)
         wait()
         end
     end)
     Section:NewToggle("TeamKill", " S U S ", function(state)
         if state then
-            cam = true
-            while cam == true do
+            tk = true
+            while tk == true do
                 for _, player in pairs(game.Players:GetPlayers()) do
-			        if player ~= game.Players.LocalPlayer then
-				        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
+			        if player ~= game.Players.LocalPlayer and player.Character.Parent ~= game.Workspace.mainGame["active_anomaly"] then
+				        player.Character.Parent = game.Workspace.mainGame["active_anomaly"]
 			        end
 		        end
             wait()
@@ -51,7 +50,7 @@ local Section = Tab:NewSection("")
             tk = false
             while tk == false do
                 for _, player in pairs(game.Players:GetPlayers()) do
-			        if player ~= game.Players.LocalPlayer then
+			        if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_anomaly"]then
 				        player.Character.Parent = game.Workspace.mainGame["active_humans"]
 			        end
 		        end
@@ -59,11 +58,24 @@ local Section = Tab:NewSection("")
             end
         end
     end)
-    Section:NewButton("Instant interaction ( F key )", "", function()
+    Section:NewToggle("New TK ( test )", " S U S ", function(state)
+        if state then
+            newtk = true
+            while newtk == true do
+				plr.Parent = game.Workspace.mainGame["active_anomaly"]
+            wait()
+            end
+        else
+            newtk = false
+            while newtk == false do
+                plr.Parent = game.Workspace.mainGame["active_humans"]
+            wait()
+            end
+        end
+    end)
+    Section:NewButton("Instant Anchor", "", function()
         game:GetService("UserInputService").InputBegan:Connect(function(Key)
             if Key.KeyCode == Enum.KeyCode.F then -- put your custom key here
-		workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with']= workspace.CurrentMap.Interactables.Ammo})
-                workspace.mainGame.remotes.game_handler:FireServer("interaction", {['with']= workspace.CurrentMap.Interactables.Reinforcements})
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.A })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.B })
                 workspace.mainGame.remotes.game_handler:FireServer("interaction", {["with"]= workspace.CurrentMap.Interactables.C })
@@ -81,7 +93,7 @@ local Section = Tab:NewSection("")
                     if anomaly:IsA("Model") then
                         local highlight = Instance.new("Highlight")
                         highlight.Parent = anomaly
-                        wait(1)
+                        wait(0.1)
                         highlight:destroy()
                     else
                     end
@@ -155,7 +167,7 @@ local Section = Tab:NewSection("")
        	game.Lighting.Ambient = Color3.fromRGB(255,255,255)
        	game.Lighting.FogColor = Color3.fromRGB(255,255,255)
         end)
-        Section:NewButton("Lag fix", "removes unnecesscary objects", function()
+        Section:NewButton("Remove stuff", "", function()
             for _,particle in pairs(game:GetDescendants()) do
                 if particle:IsA("ParticleEmitter") then
                     particle.Enabled = false
@@ -186,33 +198,51 @@ local Section = Tab:NewSection("")
         end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
-    Section:NewButton("Hunter Kit", "", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/BETA.lua"))()
-    end)
-    Section:NewButton("Equip Spare Magazine in-case", "ButtonInfo", function()
-    	workspace.mainGame.remotes.change_equipped:FireServer("merc", {["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags, ["gui"] = workspace.merc_customisation.gui.secondary })
-    end)
+    --[[Section:NewButton("Hunter Kit", "", function()
+        local lmg = require(game:GetService("ReplicatedStorage")["weapon_modules"].lmg)
+        local v1 = {}
+        v1.full_acc_aimed = true
+        v1.rpm_increase = 0.1
+        v1.rpm_increase_max = 20
+        v1.trigger_delay = 0.01
+        if lmg then
+        lmg["special_attributes"] = v1
+        end
+        print("!")
+    end)]]
+    
     Section:NewButton("Mod guns (will broken if use item!)", "", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anomalous%20Activites/Gun%20Mod.lua"))()
     end)
 local Section = Tab:NewSection("")
-   --[[ Section:NewButton("Show hidden guns", "", function()
-        for _, cyka in pairs(game.ReplicatedStorage['weapon_modules']:GetChildren()) do
-		local cs = require(cyka)
-		local v31 = {}
-			v31.not_shown = false
-			v31.disallowed = false
-		cs.special_attributes = v31
-	end
-    end)]]
     Section:NewButton("Potato Graphic", "For Potato PC/Laptop", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishBaker/scripts/main/Anti%20Lag.lua"))()
     end)
-    Section:NewButton("SUPER POTATO GRAPHIC", "I'm just kidding", function()
-        for i,v in next, workspace:GetDescendants() do
-            if v:IsA("MeshPart") or v:IsA("UnionOperation") then
-                sethiddenproperty(v, "RenderFidelity", "Automatic")
+    Section:NewToggle("??", " ", function(state)
+        anti = true
+        if state then
+            while anti == true do
+                spawn(function()
+                    for _, lag in pairs(game.Workspace.CurrentMap:GetDescendants()) do
+                        if lag:IsA("Part")then
+                            lag.Material = "Plastic"
+                        end
+                        if lag:IsA("MeshPart") then
+                            lag.MeshId = "0"
+                        end
+                        if lag:IsA("Texture") then
+                            lag.Texture = "0"
+                        end
+                        if lag:IsA("SurfaceAppearance") then
+                            lag:destroy()
+                        end
+                    wait()
+                    end
+                end)
+            wait()
             end
+        else
+            anti = false
         end
     end)
     Section:NewKeybind("Right Ctrl to close GUI", "", Enum.KeyCode.RightControl, function()
