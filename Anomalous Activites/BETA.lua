@@ -4,7 +4,7 @@ v31.rpm_increase = 0.05
 v31.rpm_increase_max = 10
 v31.trigger_delay = 0.01
 local supp = require(game.ReplicatedStorage['weapon_modules'].suppistol)
-local lmg = require(game.ReplicatedStorage['weapon_variants'].lmg_aa)
+local lmg = require(game.ReplicatedStorage['weapon_modules'].lmg)
 if lmg then
     lmg.special_attributes = v31
     lmg.desc = "Slay until there's none left."
@@ -14,17 +14,10 @@ if supp then
 end
 
 
-
-
-
-
-
-
-
 local args = {
     [1] = "merc",
     [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_variants.lmg_aa,
+        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.lmg,
         ["gui"] = workspace.merc_customisation.gui.primary
     }
 }
@@ -58,32 +51,4 @@ local args = {
 }
 
 workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
-local args = {
-    [1] = "merc",
-    [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags,
-        ["gui"] = workspace.merc_customisation.gui.equipment2
-    }
-}
 
-workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
-
-local args = {
-    [1] = "merc",
-    [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.sparemags,
-        ["gui"] = workspace.merc_customisation.gui.equipment3
-    }
-}
-
-workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
-
-local args = {
-    [1] = "merc",
-    [2] = {
-        ["item"] = game:GetService("ReplicatedStorage").weapon_modules.stim,
-        ["gui"] = workspace.merc_customisation.gui.equipment4
-    }
-}
-
-workspace.mainGame.remotes.change_equipped:FireServer(unpack(args))
