@@ -2,7 +2,11 @@ repeat wait() until game:IsLoaded()
 if game:IsLoaded() and game.PlaceId == 8770868695 then
 local lobby = game:GetService("Workspace").lobby
 local tk = false
+local cam = false
 local noclip = false
+local squad = game:GetService("ReplicatedStorage")["sound_library"].music.squad
+local announce = game:GetService("ReplicatedStorage")["sound_library"].music.black
+local squadscreen= game:GetService("ReplicatedStorage")["misc_effects"]["squad_screen"]
 local plr = game.Players.LocalPlayer.Character
 game.Players.LocalPlayer.PlayerGui.mainGui.blackOverlay.Visible = false
 local alert = Instance.new("Sound",game:GetService("SoundService"))
@@ -34,23 +38,19 @@ local Section = Tab:NewSection("")
     end)
     Section:NewToggle("TeamKill", " S U S ", function(state)
         if state then
-            tk = true
-            while tk == true do 
-                for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_humans"] then
-				player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
-			end
-		end
+            cam = true
+            while cam == true do 
+                game.Workspace.Camera.CameraType = "Follow"
+                game:GetService('Players').LocalPlayer.CameraMode = 'Classic'
+                game.Players.LocalPlayer.DevEnableMouseLock = true
             wait()
             end
         else
-            tk = false
-            while tk == false do
-                for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_firing_range"] then
-				player.Character.Parent = game.Workspace.mainGame["active_humans"]
-			end
-		end
+            cam = false
+            while cam == false do
+                game.Workspace.Camera.CameraType = "Custom"
+                game:GetService('Players').LocalPlayer.CameraMode = 'LockFirstPerson'
+                game.Players.LocalPlayer.DevEnableMouseLock = false
             wait()
             end
         end
@@ -94,11 +94,56 @@ local Section = Tab:NewSection("")
         	end
         end)
     end)
+    Section:NewToggle("3rd Person", " S U S ", function(state)
+        if state then
+            cam = true
+            while cam == true do 
+                for _, player in pairs(game.Players:GetPlayers()) do
+			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_humans"] then
+				player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
+			end
+		end
+            wait()
+            end
+        else
+            tk = false
+            while tk == false do
+                for _, player in pairs(game.Players:GetPlayers()) do
+			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_firing_range"] then
+				player.Character.Parent = game.Workspace.mainGame["active_humans"]
+			end
+		end
+            wait()
+            end
+        end
+    end)
+    Section:NewButton("? [only use ingame or start match]", "OMG BSD!!!", function()
+        local clonescreen = squadscreen:Clone()
+        clonescreen.Parent = game.Players.LocalPlayer.PlayerGui
+        clonescreen.mainframe.flash.Visible = false
+        announce:Play()
+        wait(0.2)
+        squad:Play()
+        for _,v in pairs(game.Players:GetPlayers()) do
+            if v ~= plr then
+                v.Character.Parent = game.Workspace.mainGame['active_firing_range']
+            end
+        end
+        wait(1)
+        for _,gui in pairs(clonescreen.mainframe:GetChildren()) do
+            if gui:IsA("TextLabel") then
+                gui.Visible = false  
+            end
+        end
+        game.Players.LocalPlayer.Character.Humanoid.Died:Connect(function()
+            squad.Playing = false
+        end)
+    end)
 local Tab = Window:NewTab("World")
 local Section = Tab:NewSection("")
     Section:NewButton("TP to lobby", "Useful for trolling", function()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-9, -16, 11)
-        end)
+    end)
     Section:NewButton("No Fog", "Removes fog.", function()
             while true do 
                 game.Lighting.FogEnd = 1000000
