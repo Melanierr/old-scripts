@@ -97,7 +97,7 @@ local Section = Tab:NewSection("")
     Section:NewToggle("3rd Person", " S U S ", function(state)
         if state then
             cam = true
-            while cam == true do 
+            while cam == true do
                 for _, player in pairs(game.Players:GetPlayers()) do
 			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_humans"] then
 				player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
