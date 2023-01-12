@@ -39,18 +39,22 @@ local Section = Tab:NewSection("")
     Section:NewToggle("TeamKill", " S U S ", function(state)
         if state then
             cam = true
-            while cam == true do 
-                game.Workspace.Camera.CameraType = "Follow"
-                game:GetService('Players').LocalPlayer.CameraMode = 'Classic'
-                game.Players.LocalPlayer.DevEnableMouseLock = true
+            while cam == true do
+                for _, player in pairs(game.Players:GetPlayers()) do
+			        if player ~= game.Players.LocalPlayer then
+				        player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
+			        end
+		        end
             wait()
             end
         else
-            cam = false
-            while cam == false do
-                game.Workspace.Camera.CameraType = "Custom"
-                game:GetService('Players').LocalPlayer.CameraMode = 'LockFirstPerson'
-                game.Players.LocalPlayer.DevEnableMouseLock = false
+            tk = false
+            while tk == false do
+                for _, player in pairs(game.Players:GetPlayers()) do
+			        if player ~= game.Players.LocalPlayer then
+				        player.Character.Parent = game.Workspace.mainGame["active_humans"]
+			        end
+		        end
             wait()
             end
         end
@@ -97,22 +101,18 @@ local Section = Tab:NewSection("")
     Section:NewToggle("3rd Person", " S U S ", function(state)
         if state then
             cam = true
-            while cam == true do
-                for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_humans"] then
-				player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
-			end
-		end
+            while cam == true do 
+                game.Workspace.Camera.CameraType = "Follow"
+                game:GetService('Players').LocalPlayer.CameraMode = 'Classic'
+                game.Players.LocalPlayer.DevEnableMouseLock = true
             wait()
             end
         else
-            tk = false
-            while tk == false do
-                for _, player in pairs(game.Players:GetPlayers()) do
-			if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_firing_range"] then
-				player.Character.Parent = game.Workspace.mainGame["active_humans"]
-			end
-		end
+            cam = false
+            while cam == false do
+                game.Workspace.Camera.CameraType = "Custom"
+                game:GetService('Players').LocalPlayer.CameraMode = 'LockFirstPerson'
+                game.Players.LocalPlayer.DevEnableMouseLock = false
             wait()
             end
         end
@@ -166,7 +166,6 @@ local Section = Tab:NewSection("")
                     eff.Transparency = 1 
                 end
             end
-            game.Workspace.MedicalStuff:destroy()
             for _,v in pairs(workspace:GetDescendants()) do
                 if v.ClassName == "Part" or v.ClassName == "WedgePart" then
                     v.Material = "SmoothPlastic"
@@ -183,6 +182,7 @@ local Section = Tab:NewSection("")
                     material.Color = Color3.new(163, 162, 165)
                 end
             end
+            game.Workspace.MedicalStuff:destroy()
         end)
 local Tab = Window:NewTab("Misc")
 local Section = Tab:NewSection("")
