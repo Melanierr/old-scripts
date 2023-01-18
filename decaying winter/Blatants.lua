@@ -316,19 +316,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         wait(.2)
         end
         wait(0.5)
-        for blast=1, 20 do
-        local args = {
-                    [1] = "immolate_ability",
-                    [2] = game:GetService("Players").LocalPlayer.Character,
-                    [3] = game:GetService("Players").LocalPlayer,
-                    [4] = {
-                        [1] = a.CFrame * CFrame.Angles(0, math.rad(math.random(0, 360)), 0) + hrp.CFrame[vectors[math.random(#vectors)]] * scalars[math.random(#scalars)] + Vector3.new(0, -1, 0)
-                    }
-                }
-                
-        workspace.ServerStuff.applyGore:FireServer(unpack(args))
-        task.wait(.1)
-        end
+ 
         a:Destroy()
         workspace.ServerStuff.changeStats:InvokeServer("changeclass", perk)
     end
