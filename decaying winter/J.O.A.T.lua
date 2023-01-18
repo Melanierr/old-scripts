@@ -7,13 +7,12 @@ local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 
 --// Variables
-plr.PlayerGui.controlsGui.Enabled=false
-plr.PlayerGui.topbarkek.Enabled=false
-local perks = require(ame.Workspace.ServerStuff.Statistics)
 local vectors = {"rightVector", "lookVector"}
 local scalars = {-5, 5}
 local plr = Players.LocalPlayer
 local hrp = plr.Character:WaitForChild("HumanoidRootPart")
+plr.PlayerGui.controlsGui.Enabled=false
+plr.PlayerGui.topbarkek.Enabled=false
 local mainHandler = { instance = nil, senv = nil }
 local namecall = nil
 local toggle = {
@@ -98,7 +97,7 @@ function spawnItem(itemName, slot)
             local use = nil
             if value.weapontype == "Item" or value.weapontype == "Bow" or value.weapontype == "Gun" then
                 if ReplicatedStorage.Weapons:FindFirstChild(index) then
-                    use = ReplicatedStorage.Weapons[index].ammo.Value
+                   use = ReplicatedStorage.Weapons[index].ammo.Value
                 end
 
                 if slot == nil then
@@ -117,7 +116,7 @@ function spawnItem(itemName, slot)
                 spawn(use)
             end
 
-            repeat RunService.Heartbeat:Wait() until inventory[slot][1] == itemName and localPlayer.PlayerGui.mainHUD:FindFirstChild("InventoryFrame") ~= nil
+            repeat RunService.Heartbeat:Wait() until inventory[slot][1] == itemName and plr.PlayerGui.mainHUD:FindFirstChild("InventoryFrame") ~= nil
             mainHandler.senv.invmanage("updatehud")
 
             break
@@ -233,9 +232,12 @@ local function start()
         end
     end
 
-    spawnItem("NSword", 1)
+    spawnItem("FAxe", 2)
     getActiveStat()
-    workspace.ServerStuff.changeStats:InvokeServer("changeclass", "survivalist")
+    wait(2)
+    --spawnItem("SUPAK", 2)
+    --getActiveStat()
+    workspace.ServerStuff.changeStats:InvokeServer("changeclass", "shield")
     mainHandler.senv.teamfolder = nil
     setupvalue(activeStat.mvt.func, activeStat.mvt.upvalue, 14)
 
@@ -334,24 +336,81 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         workspace.ServerStuff.changeStats:InvokeServer("changeclass", perk)
     end
 end)
-spawn(function()
-    while true do
-    if plr.Character.Humanoid.Health <= 100 then
-            warn("LOW HEALTH")
-            repeat workspace.ServerStuff.dealDamage:FireServer("lazarusheal", 1, _G.serverKey, _G.playerKey) wait(.1)
-            until plr.Character.Humanoid.Health >= 500
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.B then
+        local perk = game.Players.LocalPlayer.Character.current_perk.Value
+        local plr =game.Players.LocalPlayer
+        local hrp =plr.Character.HumanoidRootPart
+        local playerAnimation = game.Players.LocalPlayer.Character.Humanoid.Animator:LoadAnimation(game.ReplicatedStorage.animationSets.TPanimSets["2SKIN"].skinner_break)
+        playerAnimation.Priority = Enum.AnimationPriority.Action
+        playerAnimation:AdjustSpeed(.75)
+        workspace.ServerStuff.changeStats:InvokeServer("changeclass", "dagger")
+        workspace.ServerStuff.retrieveStats:InvokeServer()
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "ai", [2] = "boss" }, "enough", game.Workspace)
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "ai", [2] = "boss" }, "enough", game.Workspace)
+        playerAnimation:Play()
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "gamemode"}, "shadowspawn", game.Workspace)
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "perks"}, "sov_hex", game.Workspace)
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "perks", [2] = "two"}, "summon_tagged", game.Workspace)
+        --// Alert
+        wait(1)
+        for alert=1, 3 do
+        workspace.ServerStuff.playAudio:FireServer({ [1] = "holdout", [2] = "boss_sounds" }, "sickler", game.Workspace)
         end
-    game.Workspace["activePlayers"].ChildAdded:Connect(function(w)
-        if w.Name == plr.Name then
-            start()
-            workspace.ServerStuff.playAudio:FireServer({ [1] = "holdout", [2] = "boss_sounds" }, "rhyer", game.Workspace)
-            workspace.ServerStuff.playAudio:FireServer({ [1] = "voices", [2] = "ilija", [3] = "arrive" }, "arrive2", game.Workspace)
+        --// Cursing
+        for _,npc in pairs(game.Workspace.activeHostiles:GetChildren()) do
+        local args = {
+            [1] = "sov_dagger",
+            [2] = {
+                [1] = npc:FindFirstChild("Torso"),
+                [2] = Vector3.new(136.77305603027344, -2.4050912857055664, -1.0685887336730957)
+            },
+            [3] = _G.serverKey,
+            [4] = _G.playerKey
+        }
+        
+        workspace.ServerStuff.dealDamage:FireServer(unpack(args))
+        wait(0.1)
+        local args = {
+            [1] = {
+                [1] = "meleedamage",
+                [2] = npc,
+                [3] = "shove",
+                [4] = false,
+                [5] = "Fist",
+                [6] = false,
+                [7] = false,
+                [8] = {
+                    ["leg"] = true,
+                    ["tough"] = true,
+                    ["thick"] = true
+                },
+                [10] = {
+                    ["speedrating"] = 2,
+                    ["blacklisted"] = true,
+                    ["animset"] = "Fists",
+                    ["desc"] = "Trusty ol' painless. Great for when you're in a pickle or feel like getting up close and personal.",
+                    ["chargerating"] = 2,
+                    ["weapontype"] = "Fists",
+                    ["name"] = "Fists",
+                    ["damagerating"] = {
+                        [1] = 6,
+                        [2] = 20
+                    },
+                    ["ability"] = "Better than nothing.",
+                    ["icon"] = "2195005475",
+                    ["sizerating"] = 1
+                }
+            },
+            [3] = _G.serverKey,
+            [4] = _G.playerKey
+        }
+        
+        workspace.ServerStuff.dealDamage:FireServer(unpack(args))
+        workspace.ServerStuff.dealDamage:FireServer(unpack(args))
+        wait(.1)
         end
-    end)
-    plr.Character:WaitForChild("Humanoid").Died:Connect(function()
-        workspace.ServerStuff.playAudio:FireServer({ [1] = "general"}, "pan", game.Workspace)
-    end)
-    wait()
+        workspace.ServerStuff.changeStats:InvokeServer("changeclass", perk)
     end
 end)
 
