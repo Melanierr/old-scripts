@@ -261,11 +261,13 @@ start()
 --// ?
 spawn(function()
     while true do
-    if plr.Character.Humanoid.Health <= 200 then
+    	if plr.Character.Humanoid.Health <= 200 then
             warn("LOW HEALTH")
             repeat workspace.ServerStuff.dealDamage:FireServer("lazarusheal", 1, _G.serverKey, _G.playerKey) wait(.1)
             until plr.Character.Humanoid.Health >= 500
         end
+    wait()
+    end
     game.Workspace["activePlayers"].ChildAdded:Connect(function(w)
         if w.Name == plr.Name then
             key()
@@ -277,8 +279,6 @@ spawn(function()
     plr.Character:WaitForChild("Humanoid").Died:Connect(function()
         workspace.ServerStuff.playAudio:FireServer({ [1] = "general"}, "pan", game.Workspace)
     end)
-    wait()
-    end
 end)
 
 
