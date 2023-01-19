@@ -58,21 +58,6 @@ repeat wait() until game:IsLoaded()
          end
       end
       end)
-      Section:NewToggle("New TK ( test )", " S U S ", function(state)
-      if state then
-         newtk = true
-         while newtk == true do
-            plr.Parent = game.Workspace.mainGame["active_anomaly"]
-            wait()
-         end
-      else
-         newtk = false
-         while newtk == false do
-            plr.Parent = game.Workspace.mainGame["active_humans"]
-            wait()
-         end
-      end
-      end)
       Section:NewButton("Instant Anchor", "", function()
       game:GetService("UserInputService").InputBegan:Connect(function(Key)
       if Key.KeyCode == Enum.KeyCode.F then -- put your custom key here
@@ -93,8 +78,8 @@ repeat wait() until game:IsLoaded()
             if anomaly:IsA("Model") then
                local highlight = Instance.new("Highlight")
                highlight.Parent = anomaly
-               wait()
                highlight:destroy()
+               wait()
             else
             end
          end
