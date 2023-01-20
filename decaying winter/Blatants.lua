@@ -418,8 +418,8 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
         local args = {
             [1] = "izbucni",
             [2] = {
-                [1] = CFrame.new(Vector3.new(ROOT.CFrame.x + 15, ROOT.CFrame.y, ROOT.CFrame.z), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [1] = CFr1ame.new(Vector3.new(ROOT.CFrame.x + 15, ROOT.CFrame.y, ROOT.CFrame.z), Vector3.new(ROOT.CFrame.Position)),
+                [2] = 1
             },
             [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -430,7 +430,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x, ROOT.CFrame.y, ROOT.CFrame.z + 15), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
              [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -440,7 +440,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x - 15, ROOT.CFrame.y, ROOT.CFrame.z), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
               [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -450,18 +450,17 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x, ROOT.CFrame.y, ROOT.CFrame.z - 15), Vector3.new(ROOT.CFrame.Position)),
-                [2] = fal20se
+                [2] = 1
             },
            [3] = _G.serverKey,
             [4] = _G.playerKey
         }
         workspace.ServerStuff.dealDamage:FireServer(unpack(args))
-        for spawn=1, 5 do
         local args = {
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x + 15, ROOT.CFrame.y, ROOT.CFrame.z - 15), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
              [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -471,7 +470,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x - 15, ROOT.CFrame.y, ROOT.CFrame.z + 15),Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
               [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -481,7 +480,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x + 15, ROOT.CFrame.y, ROOT.CFrame.z + 15), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
               [3] = _G.serverKey,
             [4] = _G.playerKey
@@ -491,14 +490,12 @@ game:GetService("UserInputService").InputBegan:Connect(function(input)
             [1] = "izbucni",
             [2] = {
                 [1] = CFrame.new(Vector3.new(ROOT.CFrame.x - 15, ROOT.CFrame.y, ROOT.CFrame.z -15), Vector3.new(ROOT.CFrame.Position)),
-                [2] = false
+                [2] = 1
             },
              [3] = _G.serverKey,
             [4] = _G.playerKey
         }
         workspace.ServerStuff.dealDamage:FireServer(unpack(args))
-        wait(0.5)
-        end
         ROOT.CFrame = ROOT.CFrame - Vector3.new(-18, 0, -6)
         wait(0.5)
         local args = {
