@@ -41,7 +41,7 @@ repeat wait() until game:IsLoaded()
          while tk == true do
             for _, player in pairs(game.Players:GetPlayers()) do
                if player ~= game.Players.LocalPlayer and player.Character.Parent ~= game.Workspace.mainGame["active_anomaly"] then
-                  player.Character.Parent = game.Workspace.mainGame["active_anomaly"]
+                  player.Character.Parent = game.Workspace.mainGame["active_firing_range"]
                end
             end
             wait()
@@ -50,7 +50,7 @@ repeat wait() until game:IsLoaded()
          tk = false
          while tk == false do
             for _, player in pairs(game.Players:GetPlayers()) do
-               if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_anomaly"]then
+               if player ~= game.Players.LocalPlayer and player.Character.Parent == game.Workspace.mainGame["active_firing_range"]then
                   player.Character.Parent = game.Workspace.mainGame["active_humans"]
                end
             end
