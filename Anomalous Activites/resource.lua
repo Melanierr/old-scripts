@@ -95,21 +95,13 @@ repeat wait() until game:IsLoaded()
       end)
       Section:NewToggle("3rd Person", " S U S ", function(state)
       if state then
-         cam = true
-         while cam == true do
             game.Workspace.Camera.CameraType = "Follow"
             game:GetService('Players').LocalPlayer.CameraMode = 'Classic'
             game.Players.LocalPlayer.DevEnableMouseLock = true
-            wait()
-         end
       else
-         cam = false
-         while cam == false do
             game.Workspace.Camera.CameraType = "Custom"
             game:GetService('Players').LocalPlayer.CameraMode = 'LockFirstPerson'
             game.Players.LocalPlayer.DevEnableMouseLock = false
-            wait()
-         end
       end
       end)
       Section:NewButton("OneShot", "You use 50 Cal. bullet.", function()
