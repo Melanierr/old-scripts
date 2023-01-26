@@ -78,8 +78,6 @@ repeat wait() until game:IsLoaded()
             if anomaly:IsA("Model") then
                local highlight = Instance.new("Highlight")
                highlight.Parent = anomaly
-               wait(3)
-               highlight:destroy()
             else
             end
          end
