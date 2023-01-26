@@ -76,6 +76,7 @@ repeat wait() until game:IsLoaded()
          spawn(function()
          for _, anomaly in pairs(game.Workspace.mainGame["active_anomaly"]:GetChildren()) do
             if anomaly:IsA("Model") then
+               wait(5)
                local highlight = Instance.new("Highlight")
                highlight.Parent = anomaly
             else
