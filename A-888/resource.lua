@@ -8,6 +8,12 @@ if game.PlaceId == 12389327869 then
         plr.PlayerGui.mainGui["death_screen"].Visible=false
         plr.PlayerGui.mainGui.splatterOverlay.Visible=false
         function hb()
+            for _, ano in pairs(anomaly:GetChildren()) do
+                if ano:IsA("Model") then
+                    ano.Head.Size=Vector3.new(5, 5, 5)
+                    ano.Head.Transparency=0.5
+                end
+            end
         end
         function rm()
             game:GetService("Workspace").engineer:Destroy()
@@ -56,7 +62,7 @@ if game.PlaceId == 12389327869 then
             end)
         end)
     Tab = Window:NewTab("Weapon")
-    local Section = Tab:NewSection("[ Equipments may break! ] ")
+    local Section = Tab:NewSection("")
         Section:NewButton("Show hidden slot & guns", "", function()
             game:GetService("Workspace")["merc_customisation"].gui.equipmentip3:Destroy()
             game:GetService("Workspace")["merc_customisation"].gui.equipmentip3:Destroy()
@@ -66,21 +72,48 @@ if game.PlaceId == 12389327869 then
                 b.special_attributes = {not_shown = false,disallowed = false}
             end
         end)
-        Section:NewButton("More Ammo [ NOT RECOMMENDED]", "", function()
+        Section:NewButton("More Ammo", "", function()
             for _,a in pairs(rs.weapon_modules:GetChildren()) do
-                if a.Name ~= "sentry" or a.Name ~='pipe' or a.Name ~= 'camera' or a.Name~='smoke' or a.Name ~= "syringe" or a.Name ~='mine' or a.Name ~= 'platepiece' or a.Name~='plate' or a.Name ~= "medic" or a.Name ~='stamshot' or a.Name ~= 'shrap' or a.Name~='ammobox' or a.Name ~= 'throwaxe' then
+                if a.Name ~= "sentry" and a.Name ~='pipe' and a.Name ~= 'camera' and a.Name~='smoke' and a.Name ~= "syringe" and a.Name ~='mine' and a.Name ~= 'platepiece' and a.Name~='plate' and a.Name ~= "medic" and a.Name ~='stamshot' and a.Name ~= 'shrap' and a.Name~='ammobox' and a.Name ~= 'classic' and a.Name~='karamb' and a.Name ~= 'fists'  then
                     local b = require(a)
-                    b.special_attributes = {spare_modifier=50}
+                    b.special_attributes = {spare_modifier=100}
+                    print("blaclisted")
+                    wait(.01)
+                end
+            end
+            for _,a in pairs(rs.weapon_variants:GetChildren()) do
+                if a.Name ~= "sentry" and a.Name ~='pipe' and a.Name ~= 'camera' and a.Name~='smoke' and a.Name ~= "syringe" and a.Name ~='mine' and a.Name ~= 'platepiece' and a.Name~='plate' and a.Name ~= "medic" and a.Name ~='stamshot' and a.Name ~= 'shrap' and a.Name~='ammobox' and a.Name ~= 'throwaxe'and a.Name~='karamb' and a.Name ~= 'fists' then
+                    local b = require(a)
+                    b.special_attributes = {spare_modifier=100}
                     print("blaclisted")
                     wait(.01)
                 end
             end
         end)
-        Section:NewButton("Full Auto", "", function()
+        Section:NewButton("Full Auto [ NOT RECOMMENDED ]", "", function()
             for _,a in pairs(rs.weapon_modules:GetChildren()) do
-                if a.Name ~= "sentry" or a.Name ~='pipe' or a.Name ~= 'camera' or a.Name~='smoke' or a.Name ~= "syringe" or a.Name ~='mine' or a.Name ~= 'platepiece' or a.Name~='plate' or a.Name ~= "medic" or a.Name ~='stamshot' or a.Name ~= 'shrap' or a.Name~='ammobox' or a.Name ~= 'throwaxe' then
+                if a.Name ~= "sentry" and a.Name ~='pipe' and a.Name ~= 'camera' and a.Name~='smoke' and a.Name ~= "syringe" and a.Name ~='mine' and a.Name ~= 'platepiece' and a.Name~='plate' and a.Name ~= "medic" and a.Name ~='stamshot' and a.Name ~= 'shrap' and a.Name~='ammobox' and a.Name ~= 'throwaxe' then
                 local b = require(a)
                 b.semi_automatic = false
+                b.special_attributes = {spare_modifier=100, rpm_increase=1, rpm_max_increase=20}
+                end
+            end
+        end)
+        Section:NewButton("Heal on Kill [ IN DEVELOPMENT ] ", "", function()
+            for _,a in pairs(rs.weapon_modules:GetChildren()) do
+                if a.Name ~= "sentry" and a.Name ~='pipe' and a.Name ~= 'camera' and a.Name~='smoke' and a.Name ~= "syringe" and a.Name ~='mine' and a.Name ~= 'platepiece' and a.Name~='plate' and a.Name ~= "medic" and a.Name ~='stamshot' and a.Name ~= 'shrap' and a.Name~='ammobox' and a.Name ~= 'throwaxe' then
+                    local b = require(a)
+                    b.special_attributes = {heal_on_kill=500}
+                    print("blaclisted")
+                    wait(.01)
+                end
+            end
+            for _,a in pairs(rs.weapon_variants:GetChildren()) do
+                if a.Name ~= "sentry" and a.Name ~='pipe' and a.Name ~= 'camera' and a.Name~='smoke' and a.Name ~= "syringe" and a.Name ~='mine' and a.Name ~= 'platepiece' and a.Name~='plate' and a.Name ~= "medic" and a.Name ~='stamshot' and a.Name ~= 'shrap' and a.Name~='ammobox' and a.Name ~= 'throwaxe' then
+                    local b = require(a)
+                    b.special_attributes = {heal_on_kill=500}
+                    print("blaclisted")
+                    wait(.01)
                 end
             end
         end)
@@ -158,16 +191,15 @@ if game.PlaceId == 12389327869 then
             rm()
             game.Lighting.FogEnd=100000
             for _,lag in pairs(game:GetDescendants()) do
-                if lag:IsA("Particle Emitter") or lag:IsA("Beam") then
+                if lag:IsA("Particle Emitter") then
                     lag.Enabled = false
                 end
                 if lag:IsA("PointLight") then
                     lag:Destroy()
                     wait(.1)
                 end
-                if lag:IsA("Part") then
+                if lag:IsA("Part") or lag:IsA("MeshPart") then
                     lag.Material = "Plastic"
-                    lag.Color=Color3.new(112, 113, 121)
                     wait(.1)
                 end
                 if lag:IsA("Texture") then
