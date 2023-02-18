@@ -1,6 +1,4 @@
 --// Setup
-local optimize=false
-local mapoptimize=false
 local repl = game:GetService("ReplicatedStorage")
 local space = game:GetService("Workspace")
 local light = game:GetService("Lighting")
