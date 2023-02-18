@@ -8,22 +8,19 @@ local pgui = game:GetService("Players").LocalPlayer.PlayerGui
 while true do
     spawn(function()
         local map=space.CurrentMap
-        wait()
     end)
     wait()
 end
 
 --// Functions
-if game:IsLoaded() then
-    light.cc:Destroy()
-    light.sr:Destroy()
-    light.bl:Destroy()
-    light.Sky:Destroy()
-    light.FogEnd = 9e9
-    light.GlobalShadows=false
-    light.TimeOfDay=12
-end
-wait(1)
+
+light.cc:Destroy()
+light.sr:Destroy()
+light.bl:Destroy()
+light.Sky:Destroy()
+light.FogEnd = 9e9
+light.GlobalShadows=false
+light.TimeOfDay=12
 pgui.mainGui.blackOverlay.Visible=false
 pgui.mainGui.splatterOverlay.Visible=false
 pgui.mainGui.exfilOverlay.Visible=false
