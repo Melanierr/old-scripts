@@ -1,4 +1,4 @@
---// Ingame
+task.wait()--// Ingame
 local repl = game:GetService("ReplicatedStorage")
 local space = game:GetService("Workspace")
 local light = game:GetService("Lighting")
@@ -28,28 +28,28 @@ while true do
         for _,v in pairs(space.CurrentMap:GetChildren()) do
             if v.Name =="Lights" and v:IsA("Model") then
                 v:Destroy()
-                wait(.1)
+                task.wait(.1)
             end
         end
         wait()
         for _,object in pairs(space.CurrentMap:GetDescendants()) do
             if object:IsA("PointLight") then
                 object:Destroy()
-                wait(.1)
+               task.wait(.1)
             end
             if object:IsA("Part") then
                 object.Material = "Plastic"
                 object.Color = Color3.new(128, 128, 128)
-                wait(.1)
+                task.wait()
             end
             if object:IsA("UnionOperation") then
                 object.Material = "Plastic"
                 object.Color = Color3.new(128, 128, 128)
-                wait(.1)
+                task.wait(.1)
             end
             if object:IsA("Texture") then
                 object:Destroy()
-                wait(.1)
+                task.wait(.1)
             end
         end
     end)
