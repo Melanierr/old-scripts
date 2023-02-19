@@ -16,7 +16,6 @@ pgui.mainGui.blackOverlay.Visible=false
 pgui.mainGui.splatterOverlay.Visible=false
 pgui.mainGui.exfilOverlay.Visible=false
 pgui.mainGui.death_screen.Visible=false
-pgui.mainGui.boss_healthbar.bar.boss_name="Nigger Demon"
 if optimize==true then
     space.ElectricalPanel:Destroy()
     space.MedicalStuff:Destroy()
