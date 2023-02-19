@@ -53,7 +53,7 @@ while true do
             end
         end
     end)
-wait()
+task.wait()
 end
 game.StarterGui:SetCore("SendNotification", {
     Title = 'Thank you for your patience.';
