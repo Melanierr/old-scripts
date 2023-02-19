@@ -3,13 +3,6 @@ local repl = game:GetService("ReplicatedStorage")
 local space = game:GetService("Workspace")
 local light = game:GetService("Lighting")
 local pgui = game:GetService("Players").LocalPlayer.PlayerGui
-while true do
-    spawn(function()
-        local map=space.CurrentMap
-    end)
-    wait()
-end
-
 --// Functions
 
 light.cc:Destroy()
@@ -60,14 +53,14 @@ for _,vfx in pairs(repl.misc_effects:GetDescendants()) do
 end
 while mapoptimize==true do
     spawn(function()
-        for _,v in pairs(map:GetChildren()) do
+        for _,v in pairs(space.CurrentMap:GetChildren()) do
             if v.Name =="Lights" and v:IsA("Model") then
                 v:Destroy()
                 wait(.1)
             end
         end
         wait()
-        for _,object in pairs(map:GetDescendants()) do
+        for _,object in pairs(space.CurrentMap:GetDescendants()) do
             if object:IsA("PointLight") then
                 object:Destroy()
                 wait(.1)
