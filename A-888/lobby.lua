@@ -26,7 +26,7 @@ for _,l in pairs(space:GetDescendants()) do
     if l:IsA("PointLight") then
         l:Destroy()
     end
-    wait(.1)
+    task.wait(.1)
 end
 game.StarterGui:SetCore("SendNotification", {
     Title = 'The lobby has been optimized';
