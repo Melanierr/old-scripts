@@ -1,4 +1,4 @@
--
+-- why are you here, go back.
 getgenv().autoSellOres = false;
 getgenv().disableDialog = nil;
 getgenv().disableTalkingWeld = nil;
