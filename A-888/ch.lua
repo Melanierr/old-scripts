@@ -42,7 +42,7 @@ _G.CrosshairThickness = 1.1   -- The thickness of the crosshair.
 _G.CrosshairColor = Color3.fromRGB(0, 255, 0)   -- The color of the crosshair
 _G.CrosshairTransparency = 1   -- The transparency of the crosshair.
 
-_G.DisableKey = Enum.KeyCode.P   -- The key that enables / disables the crosshair.
+_G.DisableKey = Enum.KeyCode.U   -- The key that enables / disables the crosshair.
 
 RunService.RenderStepped:Connect(function()
     local Real_Size = _G.CrosshairSize / 2
