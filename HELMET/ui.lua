@@ -1,4 +1,4 @@
-local objectives = workspace.Objectives
+local objectives = workspace.Map.Objectives
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("HELMET", "Synapse")
 local Tab = Window:NewTab("Main")
