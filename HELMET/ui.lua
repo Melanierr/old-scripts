@@ -2,7 +2,23 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib("HELMET", "Synapse")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("More will be added!")
-Section:NewButton("Hostile ESP", "", function()
+Section:NewButton("Gun Mod", "", function()
+    local tool = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
+	for i,v in pairs(tool:GetAttributes()) do
+    		print(i,v)
+    		tool:SetAttribute("Ammo", math.huge)
+    		tool:SetAttribute("ClipSize", math.huge)
+    		tool:SetAttribute("Firerate", 2000)
+	end
+end)
+
+
+
+
+
+local Tab = Window:NewTab("Visual")
+local Section0 = Tab:NewSection("!")
+Section0:NewButton("Hostile ESP", "", function()
     -- Function to check for hostile objects and add highlights
     local function check()
         for _, a in pairs(workspace:GetChildren()) do
@@ -20,7 +36,7 @@ Section:NewButton("Hostile ESP", "", function()
     check()
 end)
 
-Section:NewButton("Objective ESP", "", function()
+Section0:NewButton("Objective ESP", "", function()
     local objectives = game:GetService("Workspace").Map.Objectives
     for _, o in pairs(objectives:GetChildren()) do
         local highlight = Instance.new("Highlight", o)
@@ -29,7 +45,7 @@ Section:NewButton("Objective ESP", "", function()
         local highlight = Instance.new("Highlight", ob)
     end)
 end)
-Section:NewButton("Skip Keycard Door", "", function()
+Section0:NewButton("Skip Keycard Door", "", function()
     -- Get the objectives from the workspace
     local objectives = game:GetService("Workspace").Map.Objectives
     local keycardDoor = objectives:FindFirstChild("KeycardDoor")
@@ -37,14 +53,28 @@ Section:NewButton("Skip Keycard Door", "", function()
         keycardDoor:Destroy()
     end
 end)
-Section:NewButton("Check for Keycard", "", function()
+Section0:NewButton("Check for Keycard", "", function()
     -- Get the Keycard object from the workspace
     local keycard = game:GetService("Workspace").Map.Geometry.CameraRoom.KeycardSpawns:FindFirstChild("Keycard")
     if keycard then
         local highlight = Instance.new("Highlight", keycard)
     end
 end)
-Section:NewButton("Fullbright", "", function()
+
+
+local Tabo = Window:NewTab("Performance")
+local Section1 = Tabo:NewSection("Optimize da game")
+Section1:NewButton("Remove shell casing", "", function()
+	for _, model in pairs(game:GetService("ReplicatedStorage").Modules.Client.BulletShells:GetChildren()) do
+		for _,shell in pairs(model:GetChildren()) do
+			shell.Transparency = 1
+		end
+	end
+end)
+Section1:NewButton("Turn off Screen Effects", "", function()
+	game.Players.LocalPlayer.PlayerGui.Effects.Enabled = false
+end)
+Section1:NewButton("Fullbright", "", function()
     local Lighting = game:GetService("Lighting")
     Lighting.Brightness = 2
     Lighting.ClockTime = 14
