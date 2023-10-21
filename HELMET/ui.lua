@@ -7,7 +7,7 @@ local Section = Tab:NewSection("More will be added!")
 Section:NewButton("Hostile ESP", "", function()
 function check()
 	for _,a in pairs (workspace:GetChildren()) do
-		if a.Name == "Hostile" and a.Name ~= plr.Name and a.Name ~= "Civilian" then
+		if a.Name == "Hostile" and a.Name ~= "Civilian" then
 			local b = Instance.new("Highlight", a)
 		end
 	end
