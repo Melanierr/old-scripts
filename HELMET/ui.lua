@@ -21,7 +21,7 @@ Section:NewButton("Skip Keycard Door", "", function()
 	game:GetService("Workspace").Map.Objectives:FindFirstChild("KeycardDoor"):Destroy()
 end)
 Section:NewButton("Check for Keycard", "", function()
-	local kc = Instance.new("Highlight", game:GetService("Workspace").Map.Geometry.CameraRoom.KeycardSpawns:FindFirstChild("Keycard")
+	local kc = Instance.new("Highlight", game:GetService("Workspace").Map.Geometry.CameraRoom.KeycardSpawns:FindFirstChild("Keycard"))
 end)
 Section:NewButton("Objective ESP", "", function()
 	for _,o in pairs(objectives:GetChildren()) do
