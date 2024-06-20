@@ -17,7 +17,7 @@ _G.ToMouse = true   -- If set to true then the crosshair will be positioned to y
 
 _G.CrosshairVisible = true   -- If set to true then the crosshair would be visible and vice versa.
 _G.CrosshairSize = 24   -- The size of the crosshair.
-_G.CrosshairThickness = 1.1   -- The thickness of the crosshair.
+_G.CrosshairThickness = 1.5   -- The thickness of the crosshair.
 _G.CrosshairColor = Color3.fromRGB(0, 255, 0)   -- The color of the crosshair
 _G.CrosshairTransparency = 1   -- The transparency of the crosshair.
 
