@@ -1,24 +1,3 @@
-local function API_Check()
-    if Drawing == nil then
-        return "No"
-    else
-        return "Yes"
-    end
-end
-
-local Find_Required = API_Check()
-
-if Find_Required == "No" then
-    game:GetService("StarterGui"):SetCore("SendNotification",{
-        Title = "";
-        Text = "Crosshair script could not be loaded because your executor is unsupported.";
-        Duration = math.huge;
-        Button1 = "OK"
-    })
-
-    return
-end
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
