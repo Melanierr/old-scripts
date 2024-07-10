@@ -1,6 +1,5 @@
 --// Functions
-function gamepass()
-    while true do
+function setGamepass()
         for __,a in pairs(game.Players.LocalPlayer.ClassConfigurations.LocalGamepasses:GetChildren()) do
             a.HasGamepass.Value = true
         end
@@ -14,8 +13,6 @@ function gamepass()
         for _, e in pairs(game.Players.LocalPlayer.ClassConfigurations.LocalAttachments:GetChildren()) do
             e.HasAttachment.Value = true
         end
-        wait()
-    end
 end
 local box = { 
     ["MaxMedicHealAmount"] = 2500,
@@ -50,11 +47,14 @@ local Section = Tabs:NewSection("WHAT")
     Section:NewButton("No Fog", "Removes fog.", function()
         while true do 
             game.Lighting.FogEnd = 1000000
-            wait()
+            wait(1)
         end
     end)
     Section:NewButton("Unlocks Gamepasses", "Removes fog.", function()
-        gamepass()
+        game:GetService('RunService').RenderStepped:connect(function()
+		setGamepass()
+		wait(1)
+	end)
     end)
     --[[
     Section:NewButton("Use gas", "", function()
